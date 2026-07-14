@@ -3330,6 +3330,82 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: child2
+      value: 
+      objectReference: {fileID: 6821683908512326974}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Cpasent.baby1
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Cpasent.baby2
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Hpasent.baby1
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Hpasent.baby2
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Npasent.baby1
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Npasent.baby2
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Opasent.baby1
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Opasent.baby2
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Fepasent.baby1
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Fepasent.baby2
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Hepasent.baby1
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Hepasent.baby2
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Mgpasent.baby1
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Mgpasent.baby2
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Nipasent.baby1
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Nipasent.baby2
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Sipasent.baby1
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Sipasent.baby2
+      value: 30
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3343,5 +3419,10 @@ Transform:
 --- !u!4 &5621271655305691778 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 108331207919539545, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+  m_PrefabInstance: {fileID: 5729170681868179419}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6821683908512326974 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1236633089996092133, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
   m_PrefabInstance: {fileID: 5729170681868179419}
   m_PrefabAsset: {fileID: 0}
