@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections;
 
 [Serializable]
 public class KaiwaPage
@@ -26,6 +27,14 @@ public class KaiwaData
 
 public class kamikaiwaScript : MonoBehaviour
 {
+    private bool firstFade = false;
+
+    [Header("開始フェード")]
+    public UnityEngine.UI.Image fadeImage;
+    public float fadeTime = 1f;
+
+    private bool isFade = false;
+
     public System.Action OnDialogueFinished;
 
 
@@ -51,6 +60,7 @@ public class kamikaiwaScript : MonoBehaviour
             return;
 
         // NEXT待ち
+        // NEXT待ち
         if (waitingNext)
         {
             if (Input.GetKeyDown(KeyCode.Return))
@@ -62,7 +72,7 @@ public class kamikaiwaScript : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return) && !isFade && isErasing)
         {
             SkipAll();
             return;
@@ -116,7 +126,13 @@ public class kamikaiwaScript : MonoBehaviour
         kaiwaBool = true;
         pageIndex = 0;
 
+        firstFade = true;
+
         ShowPage();
+
+        isErasing = false;
+
+        StartCoroutine(FadeStart());
     }
 
     void ShowPage()
@@ -162,7 +178,15 @@ public class kamikaiwaScript : MonoBehaviour
         }
 
         lineIndex = 0;
-        isErasing = true;
+
+        if (firstFade)
+        {
+            isErasing = false;
+        }
+        else
+        {
+            isErasing = true;
+        }
     }
 
 
@@ -221,6 +245,42 @@ public class kamikaiwaScript : MonoBehaviour
     public void SetFinishEvent(System.Action act)
     {
         OnDialogueFinished = act;
+    }
+
+    public IEnumerator FadeStart()
+    {
+        isFade = true;
+
+        fadeImage.gameObject.SetActive(true);
+
+        Color c = fadeImage.color;
+        c.a = 1f;
+        fadeImage.color = c;
+
+
+        float timer = 0f;
+
+        while (timer < fadeTime)
+        {
+            timer += Time.deltaTime;
+
+            c.a = Mathf.Lerp(1f, 0f, timer / fadeTime);
+            fadeImage.color = c;
+
+            yield return null;
+        }
+
+
+        // 完全透明
+        c.a = 0f;
+        fadeImage.color = c;
+
+        fadeImage.gameObject.SetActive(false);
+
+
+        isFade = false;
+        firstFade = false;
+        isErasing = true;
     }
 
 }
