@@ -337,23 +337,23 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Goal1"))
         {
-            stageManager.StageClear(1);
+            stageManager.StageClear(1, baby1jundo, baby2jundo);
         }
         else if (collision.gameObject.CompareTag("Goal2"))
         {
-            stageManager.StageClear(2);
+            stageManager.StageClear(2, baby1jundo, baby2jundo);
         }
         else if (collision.gameObject.CompareTag("Goal3"))
         {
-            stageManager.StageClear(3);
+            stageManager.StageClear(3, baby1jundo, baby2jundo);
         }
         else if (collision.gameObject.CompareTag("Goal4"))
         {
-            stageManager.StageClear(4);
+            stageManager.StageClear(4, baby1jundo, baby2jundo);
         }
         else if (collision.gameObject.CompareTag("Goal5"))
         {
-            stageManager.StageClear(5);
+            stageManager.StageClear(5, baby1jundo, baby2jundo);
         }
     }
 
