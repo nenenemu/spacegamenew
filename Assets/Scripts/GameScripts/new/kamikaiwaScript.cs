@@ -1,0 +1,226 @@
+using UnityEngine;
+using System;
+
+[Serializable]
+public class KaiwaPage
+{
+    [Header("ページの画像（1枚絵）")]
+    public UnityEngine.UI.Image pageImage;
+
+    [Header("このページの隠すマスク")]
+    public UnityEngine.UI.Image[] lineMasks;
+
+    [HideInInspector]
+    public Vector2[] defaultSizes;
+}
+
+[Serializable]
+public class KaiwaData
+{
+    [Header("会話名")]
+    public string kaiwaName;
+
+    [Header("ページ一覧")]
+    public KaiwaPage[] pages;
+}
+
+public class kamikaiwaScript : MonoBehaviour
+{
+    public System.Action OnDialogueFinished;
+
+
+    private bool waitingNext = false;
+    public UnityEngine.UI.Image nextImage;   // ← NEXT 表示用
+
+
+    [Header("登録する会話データ")]
+    public KaiwaData[] kaiwaList;
+
+    private KaiwaData current;
+    private int pageIndex = 0;
+    private int lineIndex = 0;
+
+    private bool isErasing = false;
+    public float eraseSpeed = 500f;
+
+    public bool kaiwaBool;
+
+    void Update()
+    {
+        if (!kaiwaBool || current == null)
+            return;
+
+        // NEXT待ち
+        if (waitingNext)
+        {
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                waitingNext = false;
+                nextImage.gameObject.SetActive(false);
+                NextPage();
+            }
+            return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            SkipAll();
+            return;
+        }
+
+        if (isErasing)
+        {
+            var page = current.pages[pageIndex];
+            var mask = page.lineMasks[lineIndex];
+
+            var size = mask.rectTransform.sizeDelta;
+            size.x -= eraseSpeed * Time.deltaTime;
+            if (size.x < 0) size.x = 0;
+            mask.rectTransform.sizeDelta = size;
+
+            if (size.x <= 0)
+            {
+                mask.gameObject.SetActive(false);
+                lineIndex++;
+
+                if (lineIndex >= page.lineMasks.Length)
+                {
+                    isErasing = false;
+                    waitingNext = true;
+                    nextImage.gameObject.SetActive(true);
+                }
+
+            }
+        }
+    }
+
+    public void StartKaiwa(string name)
+    {
+        current = null;
+
+        foreach (var d in kaiwaList)
+        {
+            if (d.kaiwaName == name)
+            {
+                current = d;
+                break;
+            }
+        }
+
+        if (current == null)
+        {
+            Debug.LogError("会話データがない: " + name);
+            return;
+        }
+
+        kaiwaBool = true;
+        pageIndex = 0;
+
+        ShowPage();
+    }
+
+    void ShowPage()
+    {
+        var page = current.pages[pageIndex];
+
+        // ★ 全ページのマスクを消す
+        foreach (var p in current.pages)
+        {
+            foreach (var m in p.lineMasks)
+                m.gameObject.SetActive(false);
+        }
+
+        // 全ページ非表示
+        foreach (var p in current.pages)
+            p.pageImage.gameObject.SetActive(false);
+
+        // このページの画像を表示
+        page.pageImage.gameObject.SetActive(true);
+
+        // ★★★ ここが最重要：毎回「削る前のサイズ」を保存する
+        page.defaultSizes = new Vector2[page.lineMasks.Length];
+        for (int i = 0; i < page.lineMasks.Length; i++)
+        {
+            // 今のサイズを絶対に保存（削る前のサイズ）
+            page.defaultSizes[i] = page.lineMasks[i].rectTransform.sizeDelta;
+        }
+
+        // ★★★ 次ページに行く前に絶対にサイズを戻す
+        for (int i = 0; i < page.lineMasks.Length; i++)
+        {
+            page.lineMasks[i].rectTransform.sizeDelta = page.defaultSizes[i];
+        }
+
+        // ★ マスクを表示
+        foreach (var mask in page.lineMasks)
+        {
+            mask.gameObject.SetActive(true);
+
+            var c = mask.color;
+            c.a = 1f;
+            mask.color = c;
+        }
+
+        lineIndex = 0;
+        isErasing = true;
+    }
+
+
+    void NextPage()
+    {
+        isErasing = false;
+
+        pageIndex++;
+
+        if (pageIndex >= current.pages.Length)
+        {
+            EndKaiwa();
+            return;
+        }
+
+        ShowPage();
+    }
+
+    void SkipAll()
+    {
+        var page = current.pages[pageIndex];
+
+        foreach (var mask in page.lineMasks)
+        {
+            var s = mask.rectTransform.sizeDelta;
+            s.x = 0;
+            mask.rectTransform.sizeDelta = s;
+            mask.gameObject.SetActive(false);
+        }
+
+        // ★ 次ページへ行かず NEXT を出す
+        isErasing = false;
+        waitingNext = true;
+        nextImage.gameObject.SetActive(true);
+    }
+
+
+    void EndKaiwa()
+    {
+        kaiwaBool = false;
+        isErasing = false;
+        pageIndex = 0;
+        lineIndex = 0;
+
+        foreach (var p in current.pages)
+            p.pageImage.gameObject.SetActive(false);
+
+        Debug.Log("会話終了");
+
+        // ★ 会話終了イベント発火
+        OnDialogueFinished?.Invoke();
+        OnDialogueFinished = null;
+    }
+
+
+    public void SetFinishEvent(System.Action act)
+    {
+        OnDialogueFinished = act;
+    }
+
+}
