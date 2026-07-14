@@ -1,31 +1,59 @@
 using UnityEngine;
+using UnityEngine.UI;
+
+[System.Serializable]
+public class MaterialValue
+{
+    public int baby1;
+    public int baby2;
+}
 
 public class PlayerMovement : MonoBehaviour
 {
-    public int SiCount = 0;
-    public int CCount = 0;
-    public int HeCount = 0;
-    public int HCount = 0;
-    public int MgCount = 0;
-    public int NCount = 0;
-    public int FeCount = 0;
-    public int NiCount = 0;
-    public int OCount = 0;
+    [Header("素材ゲージ増減")]
+    public MaterialValue Sipasent = new();
+    public MaterialValue Cpasent = new();
+    public MaterialValue Hepasent = new();
+    public MaterialValue Hpasent = new();
+    public MaterialValue Mgpasent = new();
+    public MaterialValue Npasent = new();
+    public MaterialValue Fepasent = new();
+    public MaterialValue Nipasent = new();
+    public MaterialValue Opasent = new();
 
-    public UnityEngine.UI.Text SiText;
-    public UnityEngine.UI.Text CText;
-    public UnityEngine.UI.Text HeText;
-    public UnityEngine.UI.Text HText;
-    public UnityEngine.UI.Text MgText;
-    public UnityEngine.UI.Text NText;
-    public UnityEngine.UI.Text FeText;
-    public UnityEngine.UI.Text NiText;
-    public UnityEngine.UI.Text OText;
+    //-------------------------
+    // 赤ちゃん
+    //-------------------------
+    private bool baby1Select = true;
 
+    private int baby1jundo = 30;
+    private int baby2jundo = 30;
 
+    //-------------------------
+    // UI
+    //-------------------------
+    [Header("UI")]
+    public GameObject UIs;
 
+    public Image gage;
+    public Image gagesita;
 
+    public Image gage2;
+    public Image gagesita2;
 
+    //-------------------------
+    // 赤ちゃんオブジェクト
+    //-------------------------
+    [Header("赤ちゃん")]
+    public GameObject child;
+    public GameObject child2;
+
+    private GameObject currentChild;
+    private GameObject subChild;
+
+    //-------------------------
+    // その他
+    //-------------------------
     public StageManager1 stageManager;
 
     [Header("カメラ")]
@@ -34,7 +62,6 @@ public class PlayerMovement : MonoBehaviour
     public float minY = 0f;
     public float maxY = 17840f;
 
-    public GameObject child;
     public GameObject Empty1;
 
     private JoyconManager jm;
@@ -43,8 +70,34 @@ public class PlayerMovement : MonoBehaviour
     [Header("噴射力")]
     public float thrustPower = 20f;
 
+    //----------------------------------------------------
     void Start()
     {
+        UIs = GameObject.Find("UIs");
+
+        if (UIs != null)
+        {
+            UIs.SetActive(true);
+
+            gage = UIs.transform.Find("gage").GetComponent<Image>();
+            gagesita = UIs.transform.Find("gagesita").GetComponent<Image>();
+
+            gage2 = UIs.transform.Find("gage2").GetComponent<Image>();
+            gagesita2 = UIs.transform.Find("gagesita2").GetComponent<Image>();
+
+            gage.gameObject.SetActive(true);
+            gagesita.gameObject.SetActive(true);
+
+            gage2.gameObject.SetActive(true);
+            gagesita2.gameObject.SetActive(true);
+        }
+
+        currentChild = child;
+        subChild = child2;
+
+        currentChild.SetActive(true);
+        subChild.SetActive(false);
+
         if (stageManager == null)
             stageManager = FindObjectOfType<StageManager1>();
 
@@ -65,16 +118,77 @@ public class PlayerMovement : MonoBehaviour
         rb.gravityScale = 0f;
         rb.linearDamping = 0f;
         rb.angularDamping = 0f;
+
+        UpdateGauge();
+    }
+    //----------------------------------------------------
+    void Update()
+    {
+        bool change = false;
+
+        // Joy-Con
+        if (jm != null && jm.j != null)
+        {
+            foreach (var jc in jm.j)
+            {
+                if (jc == null) continue;
+
+                if (!jc.isLeft)
+                {
+                    if (jc.GetButtonDown(Joycon.Button.DPAD_DOWN))
+                    {
+                        change = true;
+                    }
+                }
+            }
+        }
+
+        // キーボード
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            change = true;
+        }
+
+        if (change)
+        {
+            ChangeBaby();
+        }
     }
 
+    //----------------------------------------------------
+    void ChangeBaby()
+    {
+        // 現在の赤ちゃんの位置を保存
+        Vector3 pos = currentChild.transform.position;
+
+        // 赤ちゃん入れ替え
+        currentChild.SetActive(false);
+
+        GameObject temp = currentChild;
+        currentChild = subChild;
+        subChild = temp;
+
+        currentChild.transform.position = pos;
+        currentChild.SetActive(true);
+
+        // 操作対象変更
+        baby1Select = !baby1Select;
+
+        // ゲージ更新
+        UpdateGauge();
+    }
+
+    //----------------------------------------------------
     void FixedUpdate()
     {
-        if (child != null && Empty1 != null)
+        // 赤ちゃん追従
+        if (currentChild != null && Empty1 != null)
         {
-            child.transform.position =
-                Vector3.Lerp(child.transform.position,
-                             Empty1.transform.position,
-                             0.1f);
+            currentChild.transform.position =
+                Vector3.Lerp(
+                    currentChild.transform.position,
+                    Empty1.transform.position,
+                    0.1f);
         }
 
         Vector2 thrustDirection = Vector2.zero;
@@ -90,7 +204,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (jc == null) continue;
 
-                // 左Joy-Con：噴射方向
                 if (jc.isLeft)
                 {
                     float[] stick = jc.GetStick();
@@ -105,7 +218,6 @@ public class PlayerMovement : MonoBehaviour
 
                     joyconConnected = true;
                 }
-                // 右Joy-Con：噴射
                 else
                 {
                     if (jc.GetButton(Joycon.Button.DPAD_RIGHT))
@@ -116,28 +228,14 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        void Update()
-        {
-            SiText.text = "Si: " + SiCount.ToString();
-            CText.text = "C: " + CCount.ToString();
-            HeText.text = "He: " + HeCount.ToString();
-            HText.text = "H: " + HCount.ToString();
-            MgText.text = "Mg: " + MgCount.ToString();
-            NText.text = "N: " + NCount.ToString();
-            FeText.text = "Fe: " + FeCount.ToString();
-            NiText.text = "Ni: " + NiCount.ToString();
-            OText.text = "O: " + OCount.ToString();
-        }
-
         //-----------------------------------
         // キーボード
         //-----------------------------------
         if (!joyconConnected)
         {
-            float h = Input.GetAxisRaw("Horizontal");
-            float v = Input.GetAxisRaw("Vertical");
-
-            thrustDirection = new Vector2(h, v);
+            thrustDirection = new Vector2(
+                Input.GetAxisRaw("Horizontal"),
+                Input.GetAxisRaw("Vertical"));
 
             thrust = Input.GetKey(KeyCode.Space);
         }
@@ -147,15 +245,99 @@ public class PlayerMovement : MonoBehaviour
         //-----------------------------------
         if (thrust && thrustDirection.sqrMagnitude > 0.01f)
         {
-            rb.AddForce(thrustDirection.normalized * thrustPower, ForceMode2D.Force);
+            rb.AddForce(
+                thrustDirection.normalized * thrustPower,
+                ForceMode2D.Force);
         }
     }
 
+    //----------------------------------------------------
+    // ゲージ更新
+    //----------------------------------------------------
+    void UpdateGauge()
+    {
+        if (baby1Select)
+        {
+            Baby1(gage);
+            Baby2(gage2);
+        }
+        else
+        {
+            Baby2(gage);
+            Baby1(gage2);
+        }
+    }
+
+    void Baby1(Image img)
+    {
+        if (img == null) return;
+
+        img.fillAmount = Mathf.Clamp01(baby1jundo / 100f);
+    }
+
+    void Baby2(Image img)
+    {
+        if (img == null) return;
+
+        img.fillAmount = Mathf.Clamp01(baby2jundo / 100f);
+    }
+
+    //----------------------------------------------------
+    // 順度追加
+    //----------------------------------------------------
+    void AddJundo(MaterialValue value)
+    {
+        if (baby1Select)
+        {
+            baby1jundo += value.baby1;
+            baby1jundo = Mathf.Clamp(baby1jundo, 0, 100);
+        }
+        else
+        {
+            baby2jundo += value.baby2;
+            baby2jundo = Mathf.Clamp(baby2jundo, 0, 100);
+        }
+
+        UpdateGauge();
+    }
+
+    //----------------------------------------------------
+    // 素材取得
+    //----------------------------------------------------
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Si"))
+            AddJundo(Sipasent);
+        else if (collision.CompareTag("C"))
+            AddJundo(Cpasent);
+        else if (collision.CompareTag("He"))
+            AddJundo(Hepasent);
+        else if (collision.CompareTag("H"))
+            AddJundo(Hpasent);
+        else if (collision.CompareTag("Mg"))
+            AddJundo(Mgpasent);
+        else if (collision.CompareTag("N"))
+            AddJundo(Npasent);
+        else if (collision.CompareTag("Fe"))
+            AddJundo(Fepasent);
+        else if (collision.CompareTag("Ni"))
+            AddJundo(Nipasent);
+        else if (collision.CompareTag("O"))
+            AddJundo(Opasent);
+        else
+            return;
+
+        Destroy(collision.gameObject);
+    }
+
+    //----------------------------------------------------
+    // ゴール
+    //----------------------------------------------------
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Goal1"))
         {
-            stageManager.StageClear(1); // ★ 次はステージ2
+            stageManager.StageClear(1);
         }
         else if (collision.gameObject.CompareTag("Goal2"))
         {
@@ -173,60 +355,11 @@ public class PlayerMovement : MonoBehaviour
         {
             stageManager.StageClear(5);
         }
-
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Si"))
-        {
-            SiCount++;
-            Destroy(collision.gameObject);
-        }
-        else if (collision.CompareTag("C"))
-        {
-            CCount++;
-            Destroy(collision.gameObject);
-        }
-        else if (collision.CompareTag("He"))
-        {
-            HeCount++;
-            Destroy(collision.gameObject);
-        }
-        else if (collision.CompareTag("H"))
-        {
-            HCount++;
-            Destroy(collision.gameObject);
-        }
-        else if (collision.CompareTag("Mg"))
-        {
-            MgCount++;
-            Destroy(collision.gameObject);
-        }
-        else if (collision.CompareTag("N"))
-        {
-            NCount++;
-            Destroy(collision.gameObject);
-        }
-        else if (collision.CompareTag("Fe"))
-        {
-            FeCount++;
-            Destroy(collision.gameObject);
-        }
-        else if (collision.CompareTag("Ni"))
-        {
-            NiCount++;
-            Destroy(collision.gameObject);
-        }
-        else if (collision.CompareTag("O"))
-        {
-            OCount++;
-            Destroy(collision.gameObject);
-        }
-    }
-
-
-
+    //----------------------------------------------------
+    // カメラ
+    //----------------------------------------------------
     void LateUpdate()
     {
         if (mainCamera == null)
@@ -238,4 +371,5 @@ public class PlayerMovement : MonoBehaviour
             -10f
         );
     }
+
 }
