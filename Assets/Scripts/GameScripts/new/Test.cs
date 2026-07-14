@@ -5,6 +5,15 @@ using UnityEngine.Video;
 
 public class Test : MonoBehaviour
 {
+    [Header("フェード用")]
+    public Image fadeImage;
+    public float fadeTime = 1.0f;
+
+    [Header("紙芝居用暗転")]
+    public Image sibaiFadeImage;
+    public float sibaiFadeTime = 1.0f;
+
+
     [Header("タイトル選択UI")]
     public Button startButton;
     public Button optionsButton;
@@ -52,14 +61,19 @@ public class Test : MonoBehaviour
     //public AudioClip Defolt;
 
 
-    enum State//名まえがここにenumの軟化って感じ
+    enum State
     {
         taiki,
+        FadeIn,
+        StartMovieWait,
+        FadeOut,
         StartMovie,
         Title,
+        StartToKamisibai, //追加
+        KamisibaiFadeOut, //追加
         kamisibai
-        
     }
+
 
     private State state = State.taiki;
 
@@ -67,6 +81,14 @@ public class Test : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        Color fc = fadeImage.color;
+        fc.a = 0;
+        fadeImage.color = fc;
+
+        Color sc = sibaiFadeImage.color;
+        sc.a = 0;
+        sibaiFadeImage.color = sc;
+
         taiki.gameObject.SetActive(true);
         titleImage.gameObject.SetActive(false);
         movieImage.gameObject.SetActive(false);
@@ -127,14 +149,16 @@ public class Test : MonoBehaviour
 
                 if (inbuttom)
                 {
-                    state = State.StartMovie;
                     inbuttom = false;
+                    StartCoroutine(FadeInToMovie());
                 }
 
 
 
                 break;
-            
+
+
+
             case State.StartMovie:
                 taiki.gameObject.SetActive(false);
                 movieImage.gameObject.SetActive(true);
@@ -152,7 +176,7 @@ public class Test : MonoBehaviour
                     VideoP = true;
                 }
 
-                
+
 
                 break;
 
@@ -227,10 +251,11 @@ public class Test : MonoBehaviour
 
     public void MovieEnd(VideoPlayer vp)
     {
-        state = State.Title;
+        StartCoroutine(MovieEndToTitle());
     }
 
-    
+
+
 
     IEnumerator SlideSibai()
     {
@@ -389,9 +414,7 @@ public class Test : MonoBehaviour
     {
         if (titleIndex == 0)
         {
-            // Start
-            state = State.kamisibai;
-            ST();
+            StartCoroutine(StartKamisibaiFade());
         }
         else
         {
@@ -408,8 +431,6 @@ public class Test : MonoBehaviour
 
     public void ST()
     {
-        state = State.kamisibai;
-
         inbuttom = false;
 
         sibaiIndex = 0;
@@ -421,4 +442,130 @@ public class Test : MonoBehaviour
     {
 
     }
+
+    IEnumerator Fade(float from, float to, float time)
+    {
+        float t = 0;
+        Color c = fadeImage.color;
+
+        while (t < time)
+        {
+            t += Time.deltaTime;
+            float a = Mathf.Lerp(from, to, t / time);
+            c.a = a;
+            fadeImage.color = c;
+            yield return null;
+        }
+
+        c.a = to;
+        fadeImage.color = c;
+    }
+
+    IEnumerator FadeInToMovie()
+    {
+        state = State.FadeIn;
+
+        // フェードイン（透明→不透明）
+        yield return StartCoroutine(Fade(0f, 1f, fadeTime));
+
+        // 動画を0秒で停止した状態にする
+        movieImage.gameObject.SetActive(true);
+        videoPlayer.time = 0;
+        videoPlayer.Play();
+        videoPlayer.Pause();   // ← 0秒の画面で停止
+
+        // フェードアウト（不透明→透明）
+        state = State.FadeOut;
+        yield return StartCoroutine(Fade(1f, 0f, fadeTime));
+
+        // 完全に透明になったら動画再生
+        state = State.StartMovie;
+        videoPlayer.Play();
+    }
+
+    IEnumerator MovieEndToTitle()
+    {
+        // 動画停止
+        videoPlayer.Pause();
+
+        // フェードアウト開始
+        float t = 0;
+        Color mc = movieImage.color;
+
+        while (t < fadeTime)
+        {
+            t += Time.deltaTime;
+
+            mc.a = Mathf.Lerp(1f, 0f, t / fadeTime);
+            movieImage.color = mc;
+
+            yield return null;
+        }
+
+        // 完全透明
+        mc.a = 0f;
+        movieImage.color = mc;
+
+        // 消す
+        movieImage.gameObject.SetActive(false);
+
+        // 状態変更（必要なら）
+        state = State.Title;
+    }
+
+    IEnumerator StartKamisibaiFade()
+    {
+        inbuttom = false;
+
+        state = State.StartToKamisibai;
+
+
+        // 暗転
+        yield return StartCoroutine(SibaiFade(0f, 1f, sibaiFadeTime));
+
+
+        // 黒画面中に紙芝居初期化
+        ST();
+
+
+        // 黒画面維持
+        yield return new WaitForSeconds(0.3f);
+
+
+        // 紙芝居表示状態へ
+        state = State.kamisibai;
+
+
+        // まだ黒いので1フレーム待つ
+        yield return null;
+
+
+        // 暗転解除
+        yield return StartCoroutine(SibaiFade(1f, 0f, sibaiFadeTime));
+
+
+        // 念のため入力禁止解除
+        inbuttom = false;
+    }
+
+    IEnumerator SibaiFade(float from, float to, float time)
+    {
+        float t = 0;
+        Color c = sibaiFadeImage.color;
+
+        while (t < time)
+        {
+            t += Time.deltaTime;
+
+            c.a = Mathf.Lerp(from, to, t / time);
+            sibaiFadeImage.color = c;
+
+            yield return null;
+        }
+
+        c.a = to;
+        sibaiFadeImage.color = c;
+    }
+
+
 }
