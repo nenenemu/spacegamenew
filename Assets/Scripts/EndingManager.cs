@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class EndingManager : MonoBehaviour
 {
+    private JoyconManager jm;
+
     public static EndingManager Instance;
 
     [Serializable]
@@ -68,7 +70,11 @@ public class EndingManager : MonoBehaviour
 
     void Start()
     {
+
+
         endingStarted = false;
+
+        jm = JoyconManager.Instance;
 
         image1.gameObject.SetActive(false);
         image2.gameObject.SetActive(false);
@@ -211,12 +217,42 @@ public class EndingManager : MonoBehaviour
             // 削りループ
             while (true)
             {
+                bool nextInput = false;
+
+
+                // PC Enter
+                if (Input.GetKeyDown(KeyCode.Return) ||
+                    Input.GetKeyDown(KeyCode.KeypadEnter))
+                {
+                    nextInput = true;
+                }
+
+
+                // Joy-Con右ボタン
+                if (jm != null && jm.j != null)
+                {
+                    foreach (var jc in jm.j)
+                    {
+                        if (jc == null) continue;
+
+                        // 右Joy-Con
+                        if (!jc.isLeft)
+                        {
+                            if (jc.GetButtonDown(Joycon.Button.DPAD_RIGHT))
+                            {
+                                nextInput = true;
+                            }
+                        }
+                    }
+                }
+
+
+
+
                 // NEXT待ち
                 if (waitingNext)
                 {
-                    if (Input.GetKeyDown(KeyCode.Return) ||
-                        Input.GetKeyDown(KeyCode.KeypadEnter) ||
-                        Input.GetKeyDown(KeyCode.RightArrow))
+                    if (nextInput)
                     {
                         break;
                     }
@@ -225,10 +261,7 @@ public class EndingManager : MonoBehaviour
                 }
 
                 // スキップ
-                if (isErasing &&
-                    (Input.GetKeyDown(KeyCode.Return) ||
-                     Input.GetKeyDown(KeyCode.KeypadEnter) ||
-                     Input.GetKeyDown(KeyCode.RightArrow)))
+                if (isErasing && nextInput)
                 {
                     foreach (var mask in data.masks)
                     {

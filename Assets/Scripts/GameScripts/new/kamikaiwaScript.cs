@@ -27,6 +27,11 @@ public class KaiwaData
 
 public class kamikaiwaScript : MonoBehaviour
 {
+    private JoyconManager jm;
+
+    private float inputCooldown = 0.2f;
+    private float inputTimer = 0f;
+
     public EndingManager endingManager;
 
     private bool firstFade = false;
@@ -56,30 +61,78 @@ public class kamikaiwaScript : MonoBehaviour
 
     public bool kaiwaBool;
 
+
+    void Start()
+    {
+        jm = JoyconManager.Instance;
+    }
+
     void Update()
     {
         if (!kaiwaBool || current == null)
             return;
 
-        // NEXT待ち
+
+        // 入力クールタイム減少
+        if (inputTimer > 0)
+        {
+            inputTimer -= Time.deltaTime;
+        }
+
+
+        bool nextInput = false;
+
+
+        // PC Enter
+        if (inputTimer <= 0 && Input.GetKeyDown(KeyCode.Return))
+        {
+            nextInput = true;
+            inputTimer = inputCooldown;
+        }
+
+
+        // Joy-Con右
+        if (inputTimer <= 0 && jm != null && jm.j != null)
+        {
+            foreach (var jc in jm.j)
+            {
+                if (jc == null) continue;
+
+                if (!jc.isLeft)
+                {
+                    if (jc.GetButtonDown(Joycon.Button.DPAD_RIGHT))
+                    {
+                        nextInput = true;
+                        inputTimer = inputCooldown;
+                    }
+                }
+            }
+        }
+
+
         // NEXT待ち
         if (waitingNext)
         {
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (nextInput)
             {
                 waitingNext = false;
                 nextImage.gameObject.SetActive(false);
                 NextPage();
             }
+
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.Return) && !isFade && isErasing)
+
+        // 削り中スキップ
+        if (nextInput && !isFade && isErasing)
         {
             SkipAll();
             return;
         }
 
+
+        // 通常削り
         if (isErasing)
         {
             var page = current.pages[pageIndex];
@@ -87,8 +140,12 @@ public class kamikaiwaScript : MonoBehaviour
 
             var size = mask.rectTransform.sizeDelta;
             size.x -= eraseSpeed * Time.deltaTime;
-            if (size.x < 0) size.x = 0;
+
+            if (size.x < 0)
+                size.x = 0;
+
             mask.rectTransform.sizeDelta = size;
+
 
             if (size.x <= 0)
             {
@@ -101,7 +158,6 @@ public class kamikaiwaScript : MonoBehaviour
                     waitingNext = true;
                     nextImage.gameObject.SetActive(true);
                 }
-
             }
         }
     }
