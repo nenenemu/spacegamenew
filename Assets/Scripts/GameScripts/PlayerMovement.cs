@@ -10,6 +10,8 @@ public class MaterialValue
 
 public class PlayerMovement : MonoBehaviour
 {
+    private SpriteRenderer spriteRenderer;
+
     [Header("サブ時自動増加")]
     public float subAddTime = 3f; //何秒ごとに増えるか
     public int subAddValue = 1;   //増える量
@@ -117,6 +119,13 @@ public class PlayerMovement : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
 
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (spriteRenderer == null)
+        {
+            Debug.LogError("SpriteRendererがありません！");
+        }
+
         if (rb == null)
         {
             Debug.LogError("PlayerにRigidbody2Dが付いていません！");
@@ -179,6 +188,8 @@ public class PlayerMovement : MonoBehaviour
 
         // ★ここ追加
         AutoAddSubBaby();
+
+        UpdateDirection();
     }
 
     //----------------------------------------------------
@@ -423,6 +434,26 @@ public class PlayerMovement : MonoBehaviour
 
 
             UpdateGauge();
+        }
+    }
+    void UpdateDirection()
+    {
+        if (spriteRenderer == null)
+            return;
+
+
+        float x = rb.linearVelocity.x;
+
+
+        //右移動
+        if (x > 0.1f)
+        {
+            spriteRenderer.flipX = false;
+        }
+        //左移動
+        else if (x < -0.1f)
+        {
+            spriteRenderer.flipX = true;
         }
     }
 
