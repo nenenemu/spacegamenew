@@ -5,6 +5,14 @@ using UnityEngine.Video;
 
 public class Test : MonoBehaviour
 {
+    private SceneFadeManager sceneFade;
+
+    [Header("シーン移動用フェード")]
+    public Image sceneFadeImage;
+    public float sceneFadeTime = 1f;
+
+    private bool sceneFadeEnd = false;
+
     [Header("フェード用")]
     public Image fadeImage;
     public float fadeTime = 1.0f;
@@ -102,7 +110,10 @@ public class Test : MonoBehaviour
 
         jm = JoyconManager.Instance;
 
+        sceneFade = SceneFadeManager.Instance;
 
+        // シーン移動用の黒を透明化
+        StartCoroutine(StartSceneFade());
     }
 
     private void FixedUpdate()
@@ -147,7 +158,7 @@ public class Test : MonoBehaviour
                 }
 
 
-                if (inbuttom)
+                if (sceneFadeEnd && inbuttom)
                 {
                     inbuttom = false;
                     StartCoroutine(FadeInToMovie());
@@ -567,5 +578,18 @@ public class Test : MonoBehaviour
         sibaiFadeImage.color = c;
     }
 
+    IEnumerator StartSceneFade()
+    {
+        if (sceneFade == null)
+        {
+            Debug.LogError("SceneFadeManagerがありません");
+            yield break;
+        }
+
+
+        yield return StartCoroutine(sceneFade.Fade(1f, 0f));
+
+        sceneFadeEnd = true;
+    }
 
 }

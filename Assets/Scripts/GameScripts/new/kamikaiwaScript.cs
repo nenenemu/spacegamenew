@@ -27,6 +27,8 @@ public class KaiwaData
 
 public class kamikaiwaScript : MonoBehaviour
 {
+    public EndingManager endingManager;
+
     private bool firstFade = false;
 
     [Header("開始フェード")]
@@ -227,16 +229,16 @@ public class kamikaiwaScript : MonoBehaviour
     void EndKaiwa()
     {
         kaiwaBool = false;
-        isErasing = false;
-        pageIndex = 0;
-        lineIndex = 0;
 
         foreach (var p in current.pages)
             p.pageImage.gameObject.SetActive(false);
 
-        Debug.Log("会話終了");
+        if (current.kaiwaName == "Stage4_Clear")
+        {
+            endingManager.StartEnding();
+            return;
+        }
 
-        // ★ 会話終了イベント発火
         OnDialogueFinished?.Invoke();
         OnDialogueFinished = null;
     }
@@ -282,5 +284,7 @@ public class kamikaiwaScript : MonoBehaviour
         firstFade = false;
         isErasing = true;
     }
+
+    
 
 }
