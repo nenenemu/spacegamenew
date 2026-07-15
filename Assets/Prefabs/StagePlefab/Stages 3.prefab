@@ -3474,6 +3474,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6821683908512326974}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: subAddTime
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Cpasent.baby1
       value: 30
       objectReference: {fileID: 0}

@@ -10,6 +10,12 @@ public class MaterialValue
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("サブ時自動増加")]
+    public float subAddTime = 3f; //何秒ごとに増えるか
+    public int subAddValue = 1;   //増える量
+
+    private float subTimer = 0f;
+
     private float inputCooldown = 0.2f;
     private float inputTimer = 0f;
 
@@ -137,7 +143,6 @@ public class PlayerMovement : MonoBehaviour
         bool change = false;
 
 
-        // まだ入力禁止中なら無視
         if (inputTimer <= 0)
         {
             // Joy-Con
@@ -158,7 +163,6 @@ public class PlayerMovement : MonoBehaviour
             }
 
 
-            // キーボード
             if (Input.GetKeyDown(KeyCode.E))
             {
                 change = true;
@@ -169,10 +173,12 @@ public class PlayerMovement : MonoBehaviour
         if (change)
         {
             ChangeBaby();
-
-            // ★入力後0.2秒禁止
             inputTimer = inputCooldown;
         }
+
+
+        // ★ここ追加
+        AutoAddSubBaby();
     }
 
     //----------------------------------------------------
@@ -390,6 +396,34 @@ public class PlayerMovement : MonoBehaviour
             Mathf.Clamp(transform.position.y, minY, maxY),
             -10f
         );
+    }
+
+    void AutoAddSubBaby()
+    {
+        subTimer += Time.deltaTime;
+
+
+        if (subTimer >= subAddTime)
+        {
+            subTimer = 0;
+
+
+            // baby1操作中ならbaby2がサブ
+            if (baby1Select)
+            {
+                baby2jundo += subAddValue;
+                baby2jundo = Mathf.Clamp(baby2jundo, 0, 100);
+            }
+            else
+            {
+                // baby2操作中ならbaby1がサブ
+                baby1jundo += subAddValue;
+                baby1jundo = Mathf.Clamp(baby1jundo, 0, 100);
+            }
+
+
+            UpdateGauge();
+        }
     }
 
 }
