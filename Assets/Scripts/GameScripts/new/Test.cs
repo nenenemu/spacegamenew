@@ -217,19 +217,16 @@ public class Test : MonoBehaviour
                 titleImage.gameObject.SetActive(false);
 
 
-                //最初だけ全部表示
                 if (!sibaiStart)
                 {
                     foreach (Image img in sibai)
                     {
                         img.gameObject.SetActive(true);
 
-                        //透明リセット
                         Color c = img.color;
                         c.a = 1;
                         img.color = c;
 
-                        //位置リセット
                         img.rectTransform.anchoredPosition = Vector2.zero;
                     }
 
@@ -237,12 +234,15 @@ public class Test : MonoBehaviour
                 }
 
 
-                //入力受付
-                if (inbuttom && !sibaiMove)
+                // ★変更
+                if (inbuttom)
                 {
                     inbuttom = false;
 
-                    StartCoroutine(SlideSibai());
+                    if (!sibaiMove)
+                    {
+                        StartCoroutine(SlideSibai());
+                    }
                 }
 
 
@@ -270,8 +270,11 @@ public class Test : MonoBehaviour
 
     IEnumerator SlideSibai()
     {
+
+
         sibaiMove = true;
 
+        inbuttom = false; // ★追加
 
         Image img = sibai[sibaiIndex];
 
@@ -320,8 +323,8 @@ public class Test : MonoBehaviour
         }
         else
         {
+            sibaiMove = true; // ★もう動かせないように固定
             StartCoroutine(StartKaiwa());
-
         }
     }
 

@@ -10,6 +10,9 @@ public class MaterialValue
 
 public class PlayerMovement : MonoBehaviour
 {
+    private float inputCooldown = 0.2f;
+    private float inputTimer = 0f;
+
     [Header("素材ゲージ増減")]
     public MaterialValue Sipasent = new();
     public MaterialValue Cpasent = new();
@@ -26,8 +29,8 @@ public class PlayerMovement : MonoBehaviour
     //-------------------------
     private bool baby1Select = true;
 
-    private int baby1jundo = 30;
-    private int baby2jundo = 30;
+    private int baby1jundo = 50;
+    private int baby2jundo = 50;
 
     //-------------------------
     // UI
@@ -124,34 +127,51 @@ public class PlayerMovement : MonoBehaviour
     //----------------------------------------------------
     void Update()
     {
+        // クールタイム減少
+        if (inputTimer > 0)
+        {
+            inputTimer -= Time.deltaTime;
+        }
+
+
         bool change = false;
 
-        // Joy-Con
-        if (jm != null && jm.j != null)
-        {
-            foreach (var jc in jm.j)
-            {
-                if (jc == null) continue;
 
-                if (!jc.isLeft)
+        // まだ入力禁止中なら無視
+        if (inputTimer <= 0)
+        {
+            // Joy-Con
+            if (jm != null && jm.j != null)
+            {
+                foreach (var jc in jm.j)
                 {
-                    if (jc.GetButtonDown(Joycon.Button.DPAD_DOWN))
+                    if (jc == null) continue;
+
+                    if (!jc.isLeft)
                     {
-                        change = true;
+                        if (jc.GetButtonDown(Joycon.Button.DPAD_DOWN))
+                        {
+                            change = true;
+                        }
                     }
                 }
             }
+
+
+            // キーボード
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                change = true;
+            }
         }
 
-        // キーボード
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            change = true;
-        }
 
         if (change)
         {
             ChangeBaby();
+
+            // ★入力後0.2秒禁止
+            inputTimer = inputCooldown;
         }
     }
 
