@@ -10,6 +10,9 @@ public class MaterialValue
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("方向表示")]
+    public Transform arrowRoot;
+
     private SpriteRenderer spriteRenderer;
 
     [Header("サブ時自動増加")]
@@ -186,10 +189,11 @@ public class PlayerMovement : MonoBehaviour
         }
 
 
-        // ★ここ追加
         AutoAddSubBaby();
 
         UpdateDirection();
+
+        UpdateArrowRotation();
     }
 
     //----------------------------------------------------
@@ -455,6 +459,61 @@ public class PlayerMovement : MonoBehaviour
         {
             spriteRenderer.flipX = true;
         }
+    }
+
+    void UpdateArrowRotation()
+    {
+        Vector2 dir = Vector2.zero;
+
+
+        // JoyCon左スティック
+        if (jm != null && jm.j != null)
+        {
+            foreach (var jc in jm.j)
+            {
+                if (jc == null)
+                    continue;
+
+
+                if (jc.isLeft)
+                {
+                    float[] stick = jc.GetStick();
+
+                    dir = new Vector2(
+                        stick[0],
+                        stick[1]
+                    );
+                }
+            }
+        }
+
+
+        // PC操作
+        if (dir.sqrMagnitude < 0.01f)
+        {
+            dir = new Vector2(
+                Input.GetAxisRaw("Horizontal"),
+                Input.GetAxisRaw("Vertical")
+            );
+        }
+
+
+        // 入力なしなら回転維持
+        if (dir.sqrMagnitude < 0.01f)
+            return;
+
+
+        float angle =
+            Mathf.Atan2(dir.y, dir.x)
+            * Mathf.Rad2Deg;
+
+
+        arrowRoot.rotation =
+            Quaternion.Euler(
+                0,
+                0,
+                angle
+            );
     }
 
 }

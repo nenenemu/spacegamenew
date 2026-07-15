@@ -46,6 +46,11 @@ public class StageManager1 : MonoBehaviour
     public VideoPlayer videoPlayer;
     public RawImage movieImage;
 
+    [Header("ゴール演出")]
+    public GameObject goalImage;
+
+    public float goalDisplayTime = 2f;
+
 
     [Header("暗転")]
     public Image whiteFade;
@@ -56,7 +61,12 @@ public class StageManager1 : MonoBehaviour
     // 最初の紙芝居が終わったらステージ1を生成する
     void Start()
     {
-        
+        if (blackFade != null)
+        {
+            Color c = blackFade.color;
+            c.a = 0;
+            blackFade.color = c;
+        }
     }
 
     public void LoadStage(int index)
@@ -107,23 +117,56 @@ public class StageManager1 : MonoBehaviour
 
     IEnumerator ResultSequence(int nextStage)
     {
-        // ゴール画面のまま暗転
+        //-------------------------
+        // ゴール表示
+        //-------------------------
+
+        // ここで操作停止したいなら入れる
+        Time.timeScale = 0f;
+
+
+        if (goalImage != null)
+            goalImage.SetActive(true);
+
+
+        yield return new WaitForSecondsRealtime(2f);
+
+
+
+        //-------------------------
+        // 白暗転
+        //-------------------------
+
         yield return StartCoroutine(
-            Fade(blackFade, 0, 1)
+        Fade(blackFade, 0, 1)
         );
 
 
-        // 完全暗転後にステージ削除
+        //-------------------------
+        // 完全白
+        //-------------------------
+
+        if (goalImage != null)
+            goalImage.SetActive(false);
+
+
+
+        //-------------------------
+        // ステージ削除
+        //-------------------------
+
         if (currentStage != null)
             Destroy(currentStage);
 
 
 
-        // 動画画像表示
+        //-------------------------
+        // 動画準備
+        //-------------------------
+
         movieImage.gameObject.SetActive(true);
 
 
-        // 動画セット
         videoPlayer.clip =
             resultMovies[nextStage - 1].baby1.movies[
                 GetResult(resultBaby1)
@@ -137,27 +180,49 @@ public class StageManager1 : MonoBehaviour
             yield return null;
 
 
-        // ★最初の1フレームだけ表示
+
+        // 1フレームだけ読み込み
         videoPlayer.Play();
+
         yield return null;
+
         videoPlayer.Pause();
 
 
 
-        // 暗転解除
+        //-------------------------
+        // 白解除
+        //-------------------------
+
         yield return StartCoroutine(
-            Fade(blackFade, 1, 0)
+        Fade(blackFade, 1, 0)
         );
 
 
-        // 動画開始
+        //-------------------------
+        // 完全透明になった後
+        //-------------------------
+
+        Time.timeScale = 1f;
+
+
+        // 1フレーム待つ
+        yield return null;
+
+
+        // 完全透明後に再生
         videoPlayer.Play();
+
 
 
         while (videoPlayer.isPlaying)
             yield return null;
 
 
+
+        //-------------------------
+        // 2本目
+        //-------------------------
 
         yield return StartCoroutine(
             PlayMovie(
@@ -167,10 +232,11 @@ public class StageManager1 : MonoBehaviour
             )
         );
 
-        // ★2本の動画が終わったので動画画面を消す
+
         movieImage.gameObject.SetActive(false);
 
-        // 会話
+
+
         kaiwa.SetFinishEvent(() =>
         {
             LoadStage(nextStage);
@@ -212,7 +278,8 @@ public class StageManager1 : MonoBehaviour
 
         while (t < fadeTime)
         {
-            t += Time.deltaTime;
+            t += Time.unscaledDeltaTime;
+
 
             c.a = Mathf.Lerp(
                 start,
@@ -220,7 +287,9 @@ public class StageManager1 : MonoBehaviour
                 t / fadeTime
             );
 
+
             img.color = c;
+
 
             yield return null;
         }
