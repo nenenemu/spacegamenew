@@ -26,6 +26,11 @@ public class StageResultMovie
 
 public class StageManager1 : MonoBehaviour
 {
+    private bool isTimeOver = false;
+
+    [Header("時間切れ")]
+    public Image timeOverImage;
+
 
     [Header("ステージごとの結果動画")]
     public StageResultMovie[] resultMovies;
@@ -51,6 +56,9 @@ public class StageManager1 : MonoBehaviour
 
     public float goalDisplayTime = 2f;
 
+    [Header("ゴール時に消すUI")]
+    public GameObject[] hideUIObjects;
+
 
     [Header("暗転")]
     public Image whiteFade;
@@ -61,6 +69,11 @@ public class StageManager1 : MonoBehaviour
     // 最初の紙芝居が終わったらステージ1を生成する
     void Start()
     {
+        if (timeOverImage != null)
+        {
+            timeOverImage.gameObject.SetActive(false);
+        }
+
         if (blackFade != null)
         {
             Color c = blackFade.color;
@@ -121,16 +134,30 @@ public class StageManager1 : MonoBehaviour
         // ゴール表示
         //-------------------------
 
-        // ここで操作停止したいなら入れる
-        Time.timeScale = 0f;
 
 
-        if (goalImage != null)
-            goalImage.SetActive(true);
+
+        if (!isTimeOver)
+        {
+            if (goalImage != null)
+                goalImage.SetActive(true);
 
 
-        yield return new WaitForSecondsRealtime(2f);
+            yield return new WaitForSecondsRealtime(2f);
+        }
 
+
+        //-------------------------
+        // UI非表示
+        //-------------------------
+
+        foreach (GameObject obj in hideUIObjects)
+        {
+            if (obj != null)
+            {
+                obj.SetActive(false);
+            }
+        }
 
 
         //-------------------------
@@ -138,7 +165,7 @@ public class StageManager1 : MonoBehaviour
         //-------------------------
 
         yield return StartCoroutine(
-        Fade(blackFade, 0, 1)
+            Fade(blackFade, 0, 1)
         );
 
 
@@ -299,5 +326,58 @@ public class StageManager1 : MonoBehaviour
         img.color = c;
     }
 
+    public void TimeOver()
+    {
+        resultBaby1 = 100;
+        resultBaby2 = 100;
+
+        StartCoroutine(TimeOverSequence());
+    }
+
+    IEnumerator TimeOverSequence()
+    {
+        Time.timeScale = 0f;
+
+
+        // 制限時間切れ画像表示
+        if (timeOverImage != null)
+            timeOverImage.gameObject.SetActive(true);
+
+
+        yield return new WaitForSecondsRealtime(2f);
+
+
+        // UIを消す
+        foreach (GameObject obj in hideUIObjects)
+        {
+            if (obj != null)
+            {
+                obj.SetActive(false);
+            }
+        }
+
+
+        // 時間切れ画像を消す
+        if (timeOverImage != null)
+            timeOverImage.gameObject.SetActive(false);
+
+
+        // ★追加
+        // ステージ内に残っている素材削除
+        DestroyAllMaterials();
+
+
+        // 純度100扱い
+        resultBaby1 = 100;
+        resultBaby2 = 100;
+
+
+        isTimeOver = true;
+
+
+        yield return StartCoroutine(
+            ResultSequence(1)
+        );
+    }
 
 }

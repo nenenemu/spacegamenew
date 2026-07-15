@@ -10,6 +10,16 @@ public class MaterialValue
 
 public class PlayerMovement : MonoBehaviour
 {
+    private bool gameEnd = false;
+
+    [Header("制限時間")]
+    public float limitTime = 60f;
+
+    private float currentTime;
+
+    private bool timeOver = false;
+    
+
     [Header("方向表示")]
     public Transform arrowRoot;
 
@@ -55,6 +65,8 @@ public class PlayerMovement : MonoBehaviour
     public Image gage2;
     public Image gagesita2;
 
+    public TMPro.TextMeshProUGUI timerText;
+
     //-------------------------
     // 赤ちゃんオブジェクト
     //-------------------------
@@ -99,11 +111,21 @@ public class PlayerMovement : MonoBehaviour
             gage2 = UIs.transform.Find("gage2").GetComponent<Image>();
             gagesita2 = UIs.transform.Find("gagesita2").GetComponent<Image>();
 
+            timerText =
+            UIs.transform.Find("Timer")
+            .GetComponent<TMPro.TextMeshProUGUI>();
+
             gage.gameObject.SetActive(true);
             gagesita.gameObject.SetActive(true);
 
             gage2.gameObject.SetActive(true);
             gagesita2.gameObject.SetActive(true);
+
+            timerText.gameObject.SetActive(true);
+
+            UpdateTimerUI();
+
+            
         }
 
         currentChild = child;
@@ -141,10 +163,35 @@ public class PlayerMovement : MonoBehaviour
         rb.angularDamping = 0f;
 
         UpdateGauge();
+
+        currentTime = limitTime;
     }
     //----------------------------------------------------
     void Update()
     {
+        if (!timeOver && !gameEnd)
+        {
+            currentTime -= Time.deltaTime;
+
+
+            UpdateTimerUI();
+
+
+            if (currentTime <= 0)
+            {
+                currentTime = 0;
+                timeOver = true;
+
+
+                if (!gameEnd)
+                {
+                    gameEnd = true;
+
+                    stageManager.TimeOver();
+                }
+            }
+        }
+
         // クールタイム減少
         if (inputTimer > 0)
         {
@@ -376,25 +423,60 @@ public class PlayerMovement : MonoBehaviour
     //----------------------------------------------------
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // すでに終了していたら無視
+        if (gameEnd)
+            return;
+
+
         if (collision.gameObject.CompareTag("Goal1"))
         {
-            stageManager.StageClear(1, baby1jundo, baby2jundo);
+            gameEnd = true;
+
+            stageManager.StageClear(
+                1,
+                baby1jundo,
+                baby2jundo
+            );
         }
         else if (collision.gameObject.CompareTag("Goal2"))
         {
-            stageManager.StageClear(2, baby1jundo, baby2jundo);
+            gameEnd = true;
+
+            stageManager.StageClear(
+                2,
+                baby1jundo,
+                baby2jundo
+            );
         }
         else if (collision.gameObject.CompareTag("Goal3"))
         {
-            stageManager.StageClear(3, baby1jundo, baby2jundo);
+            gameEnd = true;
+
+            stageManager.StageClear(
+                3,
+                baby1jundo,
+                baby2jundo
+            );
         }
         else if (collision.gameObject.CompareTag("Goal4"))
         {
-            stageManager.StageClear(4, baby1jundo, baby2jundo);
+            gameEnd = true;
+
+            stageManager.StageClear(
+                4,
+                baby1jundo,
+                baby2jundo
+            );
         }
         else if (collision.gameObject.CompareTag("Goal5"))
         {
-            stageManager.StageClear(5, baby1jundo, baby2jundo);
+            gameEnd = true;
+
+            stageManager.StageClear(
+                5,
+                baby1jundo,
+                baby2jundo
+            );
         }
     }
 
@@ -415,6 +497,11 @@ public class PlayerMovement : MonoBehaviour
 
     void AutoAddSubBaby()
     {
+        // ゴール・時間切れ後は増加停止
+        if (gameEnd)
+            return;
+
+
         subTimer += Time.deltaTime;
 
 
@@ -440,6 +527,7 @@ public class PlayerMovement : MonoBehaviour
             UpdateGauge();
         }
     }
+
     void UpdateDirection()
     {
         if (spriteRenderer == null)
@@ -516,4 +604,17 @@ public class PlayerMovement : MonoBehaviour
             );
     }
 
+    void UpdateTimerUI()
+    {
+        if (timerText == null)
+            return;
+
+
+        int time =
+            Mathf.CeilToInt(currentTime);
+
+
+        timerText.text =
+            time.ToString();
+    }
 }
