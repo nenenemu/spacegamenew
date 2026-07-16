@@ -26,6 +26,9 @@ public class StageResultMovie
 
 public class StageManager1 : MonoBehaviour
 {
+    public int stageNumber = 1;   // 現在のステージ番号
+
+
     private bool isTimeOver = false;
 
     [Header("時間切れ")]
@@ -40,7 +43,7 @@ public class StageManager1 : MonoBehaviour
     public Transform stageRoot;
     public kamikaiwaScript kaiwa;
 
-    private GameObject currentStage;
+    public GameObject currentStage;
 
     // ゴール時の純度保存
     private int resultBaby1;
@@ -84,11 +87,14 @@ public class StageManager1 : MonoBehaviour
 
     public void LoadStage(int index)
     {
+        stageNumber = index + 1;  // 1始まりにする
+
         if (currentStage != null)
             Destroy(currentStage);
 
         currentStage = Instantiate(stagePrefabs[index], stageRoot);
     }
+
 
     // ★ プレイヤーから nextStage を受け取る
     public void StageClear(
@@ -116,6 +122,7 @@ public class StageManager1 : MonoBehaviour
             Destroy(mat.gameObject);
         }
     }
+
 
     int GetResult(int value)
     {
@@ -379,5 +386,7 @@ public class StageManager1 : MonoBehaviour
             ResultSequence(1)
         );
     }
+
+
 
 }

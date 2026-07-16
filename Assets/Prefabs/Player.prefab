@@ -249,6 +249,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a05ed8598be319f45a72fc5a365f443c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+  needSprite1: []
+  needSprite2: []
+  needSprite3: []
+  baby1Sprites: []
+  baby2Sprites: []
+  limitTime: 60
   arrowRoot: {fileID: 4307596716097743955}
   subAddTime: 3
   subAddValue: 1
@@ -284,6 +290,7 @@ MonoBehaviour:
   gagesita: {fileID: 0}
   gage2: {fileID: 0}
   gagesita2: {fileID: 0}
+  timerText: {fileID: 0}
   child: {fileID: 3649285861741203816}
   child2: {fileID: 1236633089996092133}
   stageManager: {fileID: 0}

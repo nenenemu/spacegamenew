@@ -10,6 +10,35 @@ public class MaterialValue
 
 public class PlayerMovement : MonoBehaviour
 {
+    private GameObject koutaiUI;
+    private GameObject haikeiUI;
+
+
+    [Header("ステージごとの必要素材画像（赤ちゃん1）")]
+    public Sprite[] needSprite1_baby1;
+    public Sprite[] needSprite2_baby1;
+    public Sprite[] needSprite3_baby1;
+
+    [Header("ステージごとの必要素材画像（赤ちゃん2）")]
+    public Sprite[] needSprite1_baby2;
+    public Sprite[] needSprite2_baby2;
+    public Sprite[] needSprite3_baby2;
+
+
+    private Image needImg1;
+    private Image needImg2;
+    private Image needImg3;
+
+
+    [Header("ステージごとの赤ちゃん画像")]
+    public Sprite[] baby1Sprites;   // ステージごとの赤ちゃん1
+    public Sprite[] baby2Sprites;   // ステージごとの赤ちゃん2
+
+    private Image uiBaby1;
+    private Image uiBaby2;
+
+
+
     private bool gameEnd = false;
 
     [Header("制限時間")]
@@ -111,6 +140,17 @@ public class PlayerMovement : MonoBehaviour
             gage2 = UIs.transform.Find("gage2").GetComponent<Image>();
             gagesita2 = UIs.transform.Find("gagesita2").GetComponent<Image>();
 
+            uiBaby1 = UIs.transform.Find("AN").GetComponent<Image>();
+            uiBaby2 = UIs.transform.Find("AN2").GetComponent<Image>();
+
+            if (stageManager == null)
+            {
+                var obj = GameObject.Find("StageManager");
+                if (obj != null)
+                    stageManager = obj.GetComponent<StageManager1>();
+            }
+
+
             timerText =
             UIs.transform.Find("Timer")
             .GetComponent<TMPro.TextMeshProUGUI>();
@@ -122,6 +162,42 @@ public class PlayerMovement : MonoBehaviour
             gagesita2.gameObject.SetActive(true);
 
             timerText.gameObject.SetActive(true);
+
+            uiBaby1.gameObject.SetActive(true);
+            uiBaby2.gameObject.SetActive(true);
+
+            // hituyou の子を取得
+            var needRoot = UIs.transform.Find("hituyou");
+
+            // 必要素材の Image 取得
+            needImg1 = needRoot.Find("sozai1").GetComponent<Image>();
+            needImg2 = needRoot.Find("sozai2").GetComponent<Image>();
+            needImg3 = needRoot.Find("sozai3").GetComponent<Image>();
+
+            needImg1.gameObject.SetActive(true);
+            needImg2.gameObject.SetActive(true);
+            needImg3.gameObject.SetActive(true);
+
+            // ★ koutai（UIs の子）
+            koutaiUI = UIs.transform.Find("koutai").gameObject;
+            koutaiUI.SetActive(true);
+
+            // ★ haikei（hituyou の子）←ここ修正！
+            haikeiUI = needRoot.Find("haikei").gameObject;
+            haikeiUI.SetActive(true);
+
+            // ★ TH（UIs の子）
+            var thUI = UIs.transform.Find("TH").gameObject;
+            thUI.SetActive(true);
+
+            // ★ Bbuttom（UIs の子）
+            var bbuttomUI = UIs.transform.Find("Bbuttom").gameObject;
+            bbuttomUI.SetActive(true);
+
+
+
+
+
 
             UpdateTimerUI();
 
@@ -165,6 +241,12 @@ public class PlayerMovement : MonoBehaviour
         UpdateGauge();
 
         currentTime = limitTime;
+
+        LoadBabySprites();
+
+        LoadNeedSprites();
+
+
     }
     //----------------------------------------------------
     void Update()
@@ -262,9 +344,30 @@ public class PlayerMovement : MonoBehaviour
         // 操作対象変更
         baby1Select = !baby1Select;
 
-        // ゲージ更新
+        // ステージ番号
+        int stage = stageManager.stageNumber - 1;
+
+
+        // Sprite を入れ替える
+        if (baby1Select)
+        {
+            currentChild.GetComponent<SpriteRenderer>().sprite = baby1Sprites[stage];
+            uiBaby1.sprite = baby1Sprites[stage];
+            uiBaby2.sprite = baby2Sprites[stage];
+        }
+        else
+        {
+            currentChild.GetComponent<SpriteRenderer>().sprite = baby2Sprites[stage];
+            uiBaby1.sprite = baby2Sprites[stage];
+            uiBaby2.sprite = baby1Sprites[stage];
+        }
+
         UpdateGauge();
+
+        LoadNeedSprites();
+
     }
+
 
     //----------------------------------------------------
     void FixedUpdate()
@@ -617,4 +720,39 @@ public class PlayerMovement : MonoBehaviour
         timerText.text =
             time.ToString();
     }
+
+    void LoadBabySprites()
+    {
+        int stage = stageManager.stageNumber - 1;
+
+
+        // UI の画像をセット
+        uiBaby1.sprite = baby1Sprites[stage];
+        uiBaby2.sprite = baby2Sprites[stage];
+
+        // 赤ちゃんオブジェクトの Sprite をセット
+        child.GetComponent<SpriteRenderer>().sprite = baby1Sprites[stage];
+        child2.GetComponent<SpriteRenderer>().sprite = baby2Sprites[stage];
+    }
+
+    void LoadNeedSprites()
+    {
+        int stage = stageManager.stageNumber - 1;
+
+        if (baby1Select)
+        {
+            needImg1.sprite = needSprite1_baby1[stage];
+            needImg2.sprite = needSprite2_baby1[stage];
+            needImg3.sprite = needSprite3_baby1[stage];
+        }
+        else
+        {
+            needImg1.sprite = needSprite1_baby2[stage];
+            needImg2.sprite = needSprite2_baby2[stage];
+            needImg3.sprite = needSprite3_baby2[stage];
+        }
+    }
+
+
+
 }
