@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2102439498466704774
+--- !u!1 &7397379792883637293
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5271571504348643072}
-  - component: {fileID: 2014101862062632845}
-  - component: {fileID: 7458729351081501852}
-  - component: {fileID: 3466216688467375666}
-  - component: {fileID: 9017087089544527804}
+  - component: {fileID: 1365798341150689561}
+  - component: {fileID: 6821799028881711560}
+  - component: {fileID: 6060686198617512561}
+  - component: {fileID: 9133442921071243743}
   m_Layer: 0
-  m_Name: inseki
-  m_TagString: inseki
+  m_Name: ryusei5
+  m_TagString: Meteor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5271571504348643072
+--- !u!4 &1365798341150689561
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2102439498466704774}
+  m_GameObject: {fileID: 7397379792883637293}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 835.4195, y: 0.00003, z: 6699.1646}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &2014101862062632845
+--- !u!212 &6821799028881711560
 SpriteRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2102439498466704774}
+  m_GameObject: {fileID: 7397379792883637293}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -82,9 +81,9 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 938131802, guid: 44e659d924b80de4991726cdddea52d4, type: 3}
+  m_Sprite: {fileID: 1531085980, guid: b0f7d6613bbef614db9ff7aaec09dd4b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -94,13 +93,13 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!70 &7458729351081501852
+--- !u!70 &6060686198617512561
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2102439498466704774}
+  m_GameObject: {fileID: 7397379792883637293}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -128,46 +127,22 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 6.5, y: 6.5}
+  m_Offset: {x: -1.64, y: -0.27}
+  m_Size: {x: 1.65, y: 0.08}
   m_Direction: 0
---- !u!114 &3466216688467375666
+--- !u!114 &9133442921071243743
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2102439498466704774}
+  m_GameObject: {fileID: 7397379792883637293}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9170202f79654e84aa9eb112d8a5ed0f, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a8e6900317c6a742b7ad240474403b6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Meteor
+  m_EditorClassIdentifier: Assembly-CSharp::MeteorMover
   speed: 3
---- !u!50 &9017087089544527804
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2102439498466704774}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
+  direction: {x: 1, y: 0}
+  curveAmplitude: 1
+  curveFrequency: 1

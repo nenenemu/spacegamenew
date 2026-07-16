@@ -21,6 +21,7 @@ TagManager:
   - O
   - inseki
   - Wall
+  - Meteor
   layers:
   - Default
   - TransparentFX

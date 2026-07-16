@@ -2,24 +2,21 @@ using UnityEngine;
 
 public class Meteor : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    public float speed = 3f;      // 移動速度
+    private int direction = 1;    // 1 = 右, -1 = 左
 
-    void Start()
+    void Update()
     {
-        rb = GetComponent<Rigidbody2D>();
+        // 横移動
+        transform.Translate(Vector2.right * direction * speed * Time.deltaTime);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        // 壁タグなら反射
-        if (collision.gameObject.CompareTag("Wall"))
+        // 左右の壁に触れたら反転
+        if (other.CompareTag("Wall"))
         {
-            Vector2 velocity = rb.linearVelocity;
-
-            // X方向だけ反転
-            velocity.x *= -1;
-
-            rb.linearVelocity = velocity;
+            direction *= -1;
         }
     }
 }
