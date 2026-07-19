@@ -5,6 +5,12 @@ using UnityEngine.Video;
 
 public class Test : MonoBehaviour
 {
+    private bool inmovie = false;
+
+    [Header("動画")]
+    public VideoClip openingMovie;
+    public VideoClip endingMovie;
+
     private SceneFadeManager sceneFade;
 
     [Header("シーン移動用フェード")]
@@ -79,7 +85,8 @@ public class Test : MonoBehaviour
         Title,
         StartToKamisibai, //追加
         KamisibaiFadeOut, //追加
-        kamisibai
+        kamisibai,
+        EndMovie        //追加
     }
 
 
@@ -248,6 +255,32 @@ public class Test : MonoBehaviour
 
                 break;
 
+            case State.EndMovie:
+
+
+                if(inmovie)
+                {
+                    taiki.gameObject.SetActive(false);
+                    movieImage.gameObject.SetActive(false);
+                    titleImage.gameObject.SetActive(false);
+
+                    foreach (Image img in sibai)
+                        img.gameObject.SetActive(false);
+                }
+                else
+                {
+                    taiki.gameObject.SetActive(false);
+                    movieImage.gameObject.SetActive(true);
+                    titleImage.gameObject.SetActive(false);
+
+                    foreach (Image img in sibai)
+                        img.gameObject.SetActive(false);
+                }
+
+                    
+
+                break;
+
 
 
         }
@@ -263,6 +296,11 @@ public class Test : MonoBehaviour
     public void MovieEnd(VideoPlayer vp)
     {
         StartCoroutine(MovieEndToTitle());
+    }
+
+    public void EndingMovieEnd(VideoPlayer vp)
+    {
+        StartCoroutine(EndingMovieToKaiwa());
     }
 
 
@@ -323,8 +361,8 @@ public class Test : MonoBehaviour
         }
         else
         {
-            sibaiMove = true; // ★もう動かせないように固定
-            StartCoroutine(StartKaiwa());
+            sibaiMove = true;
+            StartCoroutine(StartEndingMovie());
         }
     }
 
@@ -356,8 +394,8 @@ public class Test : MonoBehaviour
 
     void UpdateTitleSelection()
     {
-        Color selected = Color.yellow;
-        Color normal = Color.white;
+        Color selected = Color.white;              // 選択中：100%
+        Color normal = new Color(1f, 1f, 1f, 0.5f); // 通常：50%
 
         if (titleIndex == 0)
         {
@@ -482,6 +520,8 @@ public class Test : MonoBehaviour
         // フェードイン（透明→不透明）
         yield return StartCoroutine(Fade(0f, 1f, fadeTime));
 
+        videoPlayer.clip = openingMovie;
+
         // 動画を0秒で停止した状態にする
         movieImage.gameObject.SetActive(true);
         videoPlayer.time = 0;
@@ -593,6 +633,54 @@ public class Test : MonoBehaviour
         yield return StartCoroutine(sceneFade.Fade(1f, 0f));
 
         sceneFadeEnd = true;
+    }
+
+    IEnumerator StartEndingMovie()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        state = State.EndMovie;
+
+        movieImage.gameObject.SetActive(true);
+
+        Color c = movieImage.color;
+        c.a = 1f;
+        movieImage.color = c;
+
+        videoPlayer.Stop();
+
+        videoPlayer.clip = endingMovie;
+
+        // 最初のイベントを消す
+        videoPlayer.loopPointReached -= MovieEnd;
+        videoPlayer.loopPointReached -= EndingMovieEnd;
+
+        // 最後用イベント
+        videoPlayer.loopPointReached += EndingMovieEnd;
+
+        videoPlayer.Play();
+    }
+
+    IEnumerator EndingMovieToKaiwa()
+    {
+        videoPlayer.Stop();
+
+        // イベント解除
+        videoPlayer.loopPointReached -= EndingMovieEnd;
+
+        // ★ここでだけ暗転
+        yield return StartCoroutine(SibaiFade(0f, 1f, sibaiFadeTime));
+
+        movieImage.gameObject.SetActive(false);
+
+        // 会話開始
+        yield return StartCoroutine(StartKaiwa());
+
+        // ★ここでは暗転解除しない
+
+        sibaiFadeImage.gameObject.SetActive(false);
+
+        inmovie = true;
     }
 
 }

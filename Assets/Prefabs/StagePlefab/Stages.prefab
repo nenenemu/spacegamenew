@@ -4170,6 +4170,30 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: thrustPower
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Hpasent.baby2
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Npasent.baby2
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Hepasent.baby1
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Hepasent.baby2
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Sipasent.baby2
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: needSprite1.Array.size
       value: 4
       objectReference: {fileID: 0}
@@ -4208,7 +4232,7 @@ PrefabInstance:
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: 'baby2Sprites.Array.data[0]'
       value: 
-      objectReference: {fileID: 1880236392, guid: fc1f77a8b471a1d43990e5b8ee9fe662, type: 3}
+      objectReference: {fileID: -1189722151, guid: 25a8533b88542434d86fa14c52d4ab88, type: 3}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: 'baby2Sprites.Array.data[1]'
       value: 
@@ -4264,7 +4288,7 @@ PrefabInstance:
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: 'needSprite1_baby2.Array.data[0]'
       value: 
-      objectReference: {fileID: -245230666, guid: 5ce6e20ae4b2832429f5b30a31f6f27f, type: 3}
+      objectReference: {fileID: 1885383514, guid: 5ce6e20ae4b2832429f5b30a31f6f27f, type: 3}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: 'needSprite1_baby2.Array.data[1]'
       value: 
@@ -4296,7 +4320,7 @@ PrefabInstance:
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: 'needSprite2_baby2.Array.data[0]'
       value: 
-      objectReference: {fileID: -1310702288, guid: 5ce6e20ae4b2832429f5b30a31f6f27f, type: 3}
+      objectReference: {fileID: -1244673715, guid: 5ce6e20ae4b2832429f5b30a31f6f27f, type: 3}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: 'needSprite2_baby2.Array.data[1]'
       value: 
@@ -4328,7 +4352,7 @@ PrefabInstance:
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: 'needSprite3_baby2.Array.data[0]'
       value: 
-      objectReference: {fileID: -256217880, guid: 5ce6e20ae4b2832429f5b30a31f6f27f, type: 3}
+      objectReference: {fileID: -1139177725, guid: 5ce6e20ae4b2832429f5b30a31f6f27f, type: 3}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: 'needSprite3_baby2.Array.data[1]'
       value: 

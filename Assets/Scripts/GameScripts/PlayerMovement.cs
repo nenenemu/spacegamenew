@@ -10,6 +10,17 @@ public class MaterialValue
 
 public class PlayerMovement : MonoBehaviour
 {
+    private float originalThrustPower;
+
+
+    public float slowDuration = 2f;
+    public float slowMultiplier = 0.3f;
+
+    private bool isSlowed = false;
+    private float slowTimer = 0f;
+
+
+
     private GameObject koutaiUI;
     private GameObject haikeiUI;
 
@@ -41,12 +52,12 @@ public class PlayerMovement : MonoBehaviour
 
     private bool gameEnd = false;
 
-    [Header("制限時間")]
+    /*[Header("制限時間")]
     public float limitTime = 60f;
 
     private float currentTime;
 
-    private bool timeOver = false;
+    private bool timeOver = false;*/
     
 
     [Header("方向表示")]
@@ -128,6 +139,9 @@ public class PlayerMovement : MonoBehaviour
     //----------------------------------------------------
     void Start()
     {
+        originalThrustPower = thrustPower;
+
+
         UIs = GameObject.Find("UIs");
 
         if (UIs != null)
@@ -151,9 +165,9 @@ public class PlayerMovement : MonoBehaviour
             }
 
 
-            timerText =
+            /*timerText =
             UIs.transform.Find("Timer")
-            .GetComponent<TMPro.TextMeshProUGUI>();
+            .GetComponent<TMPro.TextMeshProUGUI>();*/
 
             gage.gameObject.SetActive(true);
             gagesita.gameObject.SetActive(true);
@@ -161,7 +175,7 @@ public class PlayerMovement : MonoBehaviour
             gage2.gameObject.SetActive(true);
             gagesita2.gameObject.SetActive(true);
 
-            timerText.gameObject.SetActive(true);
+            //timerText.gameObject.SetActive(true);
 
             uiBaby1.gameObject.SetActive(true);
             uiBaby2.gameObject.SetActive(true);
@@ -187,8 +201,8 @@ public class PlayerMovement : MonoBehaviour
             haikeiUI.SetActive(true);
 
             // ★ TH（UIs の子）
-            var thUI = UIs.transform.Find("TH").gameObject;
-            thUI.SetActive(true);
+            //var thUI = UIs.transform.Find("TH").gameObject;
+            //thUI.SetActive(true);
 
             // ★ Bbuttom（UIs の子）
             var bbuttomUI = UIs.transform.Find("Bbuttom").gameObject;
@@ -196,10 +210,7 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-
-
-
-            UpdateTimerUI();
+            //UpdateTimerUI();
 
             
         }
@@ -240,7 +251,7 @@ public class PlayerMovement : MonoBehaviour
 
         UpdateGauge();
 
-        currentTime = limitTime;
+        //currentTime = limitTime;
 
         LoadBabySprites();
 
@@ -251,7 +262,19 @@ public class PlayerMovement : MonoBehaviour
     //----------------------------------------------------
     void Update()
     {
-        if (!timeOver && !gameEnd)
+        if (isSlowed)
+        {
+            slowTimer -= Time.deltaTime;
+            if (slowTimer <= 0)
+            {
+                isSlowed = false;
+                thrustPower = originalThrustPower;   // ★元の値に戻す
+            }
+        }
+
+
+
+        /*if (!timeOver && !gameEnd)
         {
             currentTime -= Time.deltaTime;
 
@@ -272,7 +295,7 @@ public class PlayerMovement : MonoBehaviour
                     stageManager.TimeOver();
                 }
             }
-        }
+        }*/
 
         // クールタイム減少
         if (inputTimer > 0)
@@ -295,10 +318,11 @@ public class PlayerMovement : MonoBehaviour
 
                     if (!jc.isLeft)
                     {
-                        if (jc.GetButtonDown(Joycon.Button.DPAD_DOWN))
+                        if (jc.GetButtonDown(Joycon.Button.SHOULDER_2))
                         {
                             change = true;
                         }
+
                     }
                 }
             }
@@ -409,13 +433,7 @@ public class PlayerMovement : MonoBehaviour
 
                     joyconConnected = true;
                 }
-                else
-                {
-                    if (jc.GetButton(Joycon.Button.DPAD_RIGHT))
-                    {
-                        thrust = true;
-                    }
-                }
+                
             }
         }
 
@@ -428,18 +446,18 @@ public class PlayerMovement : MonoBehaviour
                 Input.GetAxisRaw("Horizontal"),
                 Input.GetAxisRaw("Vertical"));
 
-            thrust = Input.GetKey(KeyCode.Space);
         }
 
         //-----------------------------------
         // 噴射
         //-----------------------------------
-        if (thrust && thrustDirection.sqrMagnitude > 0.01f)
+        if (thrustDirection.sqrMagnitude > 0.01f)
         {
             rb.AddForce(
                 thrustDirection.normalized * thrustPower,
                 ForceMode2D.Force);
         }
+
     }
 
     //----------------------------------------------------
@@ -497,6 +515,23 @@ public class PlayerMovement : MonoBehaviour
     //----------------------------------------------------
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // 流星に当たったらスピード低下＋流星を消す
+        if (collision.CompareTag("Meteor"))
+        {
+            Debug.Log("Now Slowed!");
+
+            if (!isSlowed)
+            {
+                isSlowed = true;
+                slowTimer = slowDuration;
+                thrustPower *= slowMultiplier;   // 遅くする
+            }
+
+            Destroy(collision.gameObject);       // ★ここで消す
+            return;                              // ★他の処理に行かない
+        }
+
+        // 素材処理
         if (collision.CompareTag("Si"))
             AddJundo(Sipasent);
         else if (collision.CompareTag("C"))
@@ -518,8 +553,9 @@ public class PlayerMovement : MonoBehaviour
         else
             return;
 
-        Destroy(collision.gameObject);
+        Destroy(collision.gameObject);   // 素材はここで消す
     }
+
 
     //----------------------------------------------------
     // ゴール
@@ -707,7 +743,7 @@ public class PlayerMovement : MonoBehaviour
             );
     }
 
-    void UpdateTimerUI()
+    /*void UpdateTimerUI()
     {
         if (timerText == null)
             return;
@@ -719,7 +755,7 @@ public class PlayerMovement : MonoBehaviour
 
         timerText.text =
             time.ToString();
-    }
+    }*/
 
     void LoadBabySprites()
     {
