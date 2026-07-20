@@ -1,0 +1,151 @@
+using UnityEngine;
+using System.Collections;
+
+public class BGMManager : MonoBehaviour
+{
+    public static BGMManager Instance;
+
+    [Header("AudioSource")]
+    public AudioSource bgmSource;
+    public AudioSource seSource;
+
+    [Header("BGM")]
+    public AudioClip taikiBGM;
+    public AudioClip titleBGM;
+    public AudioClip kamishibaiBGM;
+    public AudioClip kaiwaBGM;
+    public AudioClip gameBGM;
+    public AudioClip endingBGM;
+
+    [Header("ìÆâÊSE")]
+    public AudioClip movieSE1;
+    public AudioClip movieSE2;
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    //================================================
+    // BGM
+    //================================================
+
+    public void PlayTaiki()
+    {
+        PlayBGM(taikiBGM);
+    }
+
+    public void PlayTitle()
+    {
+        PlayBGM(titleBGM);
+    }
+
+    public void PlayKamishibai()
+    {
+        PlayBGM(kamishibaiBGM);
+    }
+
+    public void PlayKaiwa()
+    {
+        PlayBGM(kaiwaBGM);
+    }
+
+    public void PlayGame()
+    {
+        PlayBGM(gameBGM);
+    }
+
+    public void PlayEnding()
+    {
+        PlayBGM(endingBGM);
+    }
+
+    public void StopBGM()
+    {
+        bgmSource.Stop();
+    }
+
+    //================================================
+    // SE
+    //================================================
+
+    public void PlayMovieSE1()
+    {
+        seSource.PlayOneShot(movieSE1);
+    }
+
+    public void PlayMovieSE2()
+    {
+        seSource.PlayOneShot(movieSE2);
+    }
+
+    public void PlaySE(AudioClip clip)
+    {
+        seSource.PlayOneShot(clip);
+    }
+
+    //================================================
+    // ìÆâÊSEÇéûä‘éwíËÇ≈ñ¬ÇÁÇ∑
+    //================================================
+
+    public void PlayMovieSE(float time1, float time2)
+    {
+        StartCoroutine(MovieSE(time1, time2));
+    }
+
+    IEnumerator MovieSE(float time1, float time2)
+    {
+        yield return new WaitForSeconds(time1);
+        PlayMovieSE1();
+
+        yield return new WaitForSeconds(time2 - time1);
+        PlayMovieSE2();
+    }
+
+    //================================================
+    // ã§í 
+    //================================================
+
+    void PlayBGM(AudioClip clip)
+    {
+        if (bgmSource == null)
+        {
+            Debug.LogError("BGM AudioSource Ç™Ç†ÇËÇ‹ÇπÇÒ");
+            return;
+        }
+
+        if (clip == null) return;
+
+        if (bgmSource.clip == clip && bgmSource.isPlaying)
+            return;
+
+        bgmSource.Stop();
+        bgmSource.clip = clip;
+        bgmSource.loop = true;
+        bgmSource.Play();
+    }
+
+    public void StartOpeningMovie()
+    {
+        bgmSource.Stop();
+
+        PlayMovieSE1();
+
+        StartCoroutine(PlayMovieSE2Delay());
+    }
+
+    IEnumerator PlayMovieSE2Delay()
+    {
+        yield return new WaitForSeconds(3f); // çDÇ´Ç»ïbêî
+
+        PlayMovieSE2();
+    }
+}

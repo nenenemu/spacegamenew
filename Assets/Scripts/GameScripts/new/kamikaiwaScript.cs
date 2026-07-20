@@ -164,6 +164,8 @@ public class kamikaiwaScript : MonoBehaviour
 
     public void StartKaiwa(string name)
     {
+        BGMManager.Instance.PlayKaiwa();
+
         current = null;
 
         foreach (var d in kaiwaList)
@@ -294,6 +296,8 @@ public class kamikaiwaScript : MonoBehaviour
             endingManager.StartEnding();
             return;
         }
+
+        BGMManager.Instance.StopBGM();   // Å©í«â¡
 
         OnDialogueFinished?.Invoke();
         OnDialogueFinished = null;

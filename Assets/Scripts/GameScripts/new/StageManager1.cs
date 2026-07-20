@@ -270,9 +270,9 @@ public class StageManager1 : MonoBehaviour
         movieImage.gameObject.SetActive(false);
 
 
-
         kaiwa.SetFinishEvent(() =>
         {
+            BGMManager.Instance.PlayGame();
             LoadStage(nextStage);
         });
 

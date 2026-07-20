@@ -96,6 +96,8 @@ public class Test : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        BGMManager.Instance.PlayTaiki();
+
         Color fc = fadeImage.color;
         fc.a = 0;
         fadeImage.color = fc;
@@ -381,14 +383,12 @@ public class Test : MonoBehaviour
     {
         yield return new WaitForSeconds(kaiwaWaitTime);
 
-        // ★ 会話終了後にステージ1を生成するように StageManager に登録
         stageManager.kaiwa.SetFinishEvent(() =>
         {
+            BGMManager.Instance.PlayGame();
             stageManager.LoadStage(0);
         });
 
-
-        // ★ 紙芝居後の会話開始
         kamikaiwaScript.StartKaiwa("Start");
     }
 
@@ -515,6 +515,8 @@ public class Test : MonoBehaviour
 
     IEnumerator FadeInToMovie()
     {
+        BGMManager.Instance.StartOpeningMovie();
+
         state = State.FadeIn;
 
         // フェードイン（透明→不透明）
@@ -565,6 +567,8 @@ public class Test : MonoBehaviour
 
         // 状態変更（必要なら）
         state = State.Title;
+
+        BGMManager.Instance.PlayTitle();
     }
 
     IEnumerator StartKamisibaiFade()
@@ -588,6 +592,8 @@ public class Test : MonoBehaviour
 
         // 紙芝居表示状態へ
         state = State.kamisibai;
+
+        BGMManager.Instance.PlayKamishibai();
 
 
         // まだ黒いので1フレーム待つ

@@ -108,6 +108,8 @@ public class EndingManager : MonoBehaviour
         image1.gameObject.SetActive(false);
         image2.gameObject.SetActive(true);
 
+        BGMManager.Instance.PlayEnding();
+
         yield return StartCoroutine(Image2Shake());
         yield return new WaitForSeconds(image2Time);
 
@@ -131,6 +133,8 @@ public class EndingManager : MonoBehaviour
         yield return new WaitForSeconds(lastImageTime);
 
         yield return StartCoroutine(SceneFadeManager.Instance.Fade(0f, 1f));
+
+        BGMManager.Instance.PlayTaiki();
 
         SceneManager.LoadScene("Stage1");
     }
