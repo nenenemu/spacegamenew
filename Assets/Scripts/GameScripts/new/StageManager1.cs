@@ -661,7 +661,38 @@ public class StageManager1 : MonoBehaviour
                 }
 
                 if (next)
+                {
+                    Debug.Log("ボタン押された：" + s.name);
+
+                    // ボタンを離すまで待つ
+                    yield return new WaitUntil(() =>
+                    {
+                        bool enter = Input.GetKey(KeyCode.Return);
+
+                        bool joycon = false;
+
+                        if (jm != null && jm.j != null)
+                        {
+                            foreach (var jc in jm.j)
+                            {
+                                if (jc == null) continue;
+
+                                if (!jc.isLeft &&
+                                    jc.GetButton(Joycon.Button.DPAD_RIGHT))
+                                {
+                                    joycon = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        return !enter && !joycon;
+                    });
+
+                    yield return null;
+
                     break;
+                }
 
                 yield return null;
             }
