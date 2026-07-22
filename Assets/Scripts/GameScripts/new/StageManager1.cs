@@ -613,6 +613,7 @@ public class StageManager1 : MonoBehaviour
         if (collector != null)
         {
             collector.ApplyMaterialImages();
+            collector.ApplyPlayerSprite();
         }
 
         if (player != null)

@@ -1,7 +1,24 @@
 using UnityEngine;
 
+[System.Serializable]
+public class PlayerSpriteData
+{
+    public int stageNumber;
+
+    // 1回目
+    public Sprite firstSprite;
+
+    // 2回目
+    public Sprite secondSprite;
+}
+
 public class PlayerCollect2D : MonoBehaviour
 {
+    [Header("プレイヤー見た目変更")]
+    public SpriteRenderer playerRenderer;
+
+    public PlayerSpriteData[] playerSpriteDatas;
+
     PlayerMovement2D player;
     StageManager1 stageManager;
 
@@ -20,6 +37,7 @@ public class PlayerCollect2D : MonoBehaviour
         stageManager = FindObjectOfType<StageManager1>();
 
         ApplyMaterialImages();
+        ApplyPlayerSprite();
     }
 
     public void ApplyMaterialImages()
@@ -62,6 +80,28 @@ public class PlayerCollect2D : MonoBehaviour
             player.Damage(20);
 
         Destroy(col.gameObject);
+    }
+
+    public void ApplyPlayerSprite()
+    {
+        foreach (var data in playerSpriteDatas)
+        {
+            if (data.stageNumber != stageManager.stageNumber)
+                continue;
+
+
+            if (stageManager.stagePlayCount == 0)
+            {
+                playerRenderer.sprite = data.firstSprite;
+            }
+            else
+            {
+                playerRenderer.sprite = data.secondSprite;
+            }
+
+
+            break;
+        }
     }
 }
 
