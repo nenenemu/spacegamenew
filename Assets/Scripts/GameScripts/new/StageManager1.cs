@@ -594,7 +594,7 @@ public class StageManager1 : MonoBehaviour
         startImage.color = sc;
 
         // START表示
-        yield return new WaitForSecondsRealtime(stageStartTime + 1.5f);
+        yield return new WaitForSecondsRealtime(stageStartTime + 0.2f);//インスペクターかな？マジでわからん
 
         // STARTフェードアウト
         float t = 0f;

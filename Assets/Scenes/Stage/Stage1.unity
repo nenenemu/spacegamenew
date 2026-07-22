@@ -9595,7 +9595,7 @@ MonoBehaviour:
   stage2Material: {fileID: 21300000, guid: bf717098ee32f404d9ced6407632c277, type: 3}
   stage34Control: {fileID: 21300000, guid: 508cb19f8a967c94d97695db72b03b5f, type: 3}
   stageStartImage: {fileID: 18969946}
-  stageStartTime: 2
+  stageStartTime: 0.5
   stageStartFade: 1
   canSpawn: 0
   canPlayerMove: 0
