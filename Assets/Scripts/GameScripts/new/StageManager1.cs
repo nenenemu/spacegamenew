@@ -67,7 +67,7 @@ public class StageManager1 : MonoBehaviour
     private int resultBaby1;
     private int resultBaby2;
 
-    private int stagePlayCount = 0;  // ★ステージ3・4を2回プレイするため
+    public int stagePlayCount = 0;  // ★ステージ3・4を2回プレイするため
 
     public VideoPlayer videoPlayer;
     public RawImage movieImage;
