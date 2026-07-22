@@ -4,7 +4,9 @@ using System.Collections.Generic;
 
 public class PlayerMovement2D : MonoBehaviour
 {
-    public float limitTime = 120f;
+
+
+    public float limitTime = 90f;
 
     public StageManager1 stageManager;
     public float survivalTime; // 経過時間
@@ -79,11 +81,19 @@ public class PlayerMovement2D : MonoBehaviour
 
     void Update()
     {
+        // ★ステージ開始前は時間を進めない
+        if (stageManager == null || !stageManager.canSpawn)
+            return;
+
+        // 経過時間を加算
         survivalTime += Time.deltaTime;
 
+        // ★終了判定はこれ1つだけでOK
         if (survivalTime >= limitTime)
         {
+            stageManager.isTimeOver = true;
             stageManager.PlayerSurvivedFullTime();
+            return; // ★これ重要：二重判定防止
         }
 
         //=========================
@@ -93,7 +103,6 @@ public class PlayerMovement2D : MonoBehaviour
         input.x = Input.GetAxisRaw("Horizontal");
         input.y = Input.GetAxisRaw("Vertical");
 
-
         //=========================
         // JoyCon入力
         //=========================
@@ -102,19 +111,11 @@ public class PlayerMovement2D : MonoBehaviour
         {
             float[] stick = leftJoycon.GetStick();
 
-            Vector2 joyInput = new Vector2(
-                stick[0],
-                stick[1]
-            );
+            Vector2 joyInput = new Vector2(stick[0], stick[1]);
 
-
-            // JoyConが倒されている時だけ使用
             if (joyInput.magnitude > 0.15f)
-            {
                 input = joyInput;
-            }
         }
-
 
         input = input.normalized;
     }

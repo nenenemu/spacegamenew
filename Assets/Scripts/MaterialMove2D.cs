@@ -25,6 +25,8 @@ public class MaterialMove2D : MonoBehaviour
         rb.linearVelocity = dir.normalized * speed;
     }
 
+
+
     void FixedUpdate()
     {
         rb.linearVelocity = rb.linearVelocity.normalized * speed;

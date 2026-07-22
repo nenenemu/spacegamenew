@@ -22,7 +22,7 @@ public class PlayerCollect2D : MonoBehaviour
         ApplyMaterialImages();
     }
 
-    void ApplyMaterialImages()
+    public void ApplyMaterialImages()
     {
         // ステージ3・4だけ切り替える
         if (stageManager.stageNumber == 3 || stageManager.stageNumber == 4)
@@ -41,6 +41,7 @@ public class PlayerCollect2D : MonoBehaviour
             }
         }
     }
+
 
     void OnCollisionEnter2D(Collision2D col)
     {

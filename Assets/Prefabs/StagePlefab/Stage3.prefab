@@ -2069,7 +2069,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4b6d0b9daaaa374c92276f4ebd786bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  limitTime: 120
+  limitTime: 90
   stageManager: {fileID: 0}
   survivalTime: 0
   gameOverImage: {fileID: 4268960302070953437}

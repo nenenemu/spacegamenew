@@ -66,7 +66,7 @@ public class StageManager1 : MonoBehaviour
 
     public int stageNumber = 1;
 
-    private bool isTimeOver = false;
+    public bool isTimeOver = false;
     private bool isResultRunning = false;
 
     public Image timeOverImage;
@@ -135,17 +135,21 @@ public class StageManager1 : MonoBehaviour
 
     public void LoadStage(int index)
     {
+        // ステージ番号を更新
         stageNumber = index + 1;
 
-        // ★追加
+        // START画像を出すかどうか
         if (stageNumber == 3 || stageNumber == 4)
             showStart = true;
 
+        // 既存ステージ削除
         if (currentStage != null)
             Destroy(currentStage);
 
+        // 新しいステージをロード
         currentStage = Instantiate(stagePrefabs[index], stageRoot);
     }
+
 
     // ★素材正解判定（PlayerMovement2D から呼ばれる）
     public bool IsCorrectMaterial(int materialIndex)
@@ -195,10 +199,20 @@ public class StageManager1 : MonoBehaviour
 
     int GetResult(int value)
     {
-        if (value < 34) return 0;
-        if (value < 67) return 1;
-        return 2;
+        // ステージ3・4だけムービーの並びが逆
+        if (stageNumber == 3 || stageNumber == 4)
+        {
+            if (value < 34) return 2;   // 悪い → movies[2]
+            if (value < 67) return 1;   // 中   → movies[1]
+            return 0;                   // 良い → movies[0]
+        }
+
+        // ステージ1・2は通常の並び
+        if (value < 34) return 0;       // 悪い → movies[0]
+        if (value < 67) return 1;       // 中   → movies[1]
+        return 2;                       // 良い → movies[2]
     }
+
 
     // ★ステージ3・4の間の演出（巨大化なし）
     IEnumerator StageTransitionEffect()
@@ -374,23 +388,24 @@ public class StageManager1 : MonoBehaviour
     // ★120秒生存時
     public void PlayerSurvivedFullTime()
     {
-        float time = 120f;
+        // ★実際に生き残った時間を使う
+        PlayerMovement2D player = FindFirstObjectByType<PlayerMovement2D>();
+        float time = player != null ? player.survivalTime : 90f;
+
         int eval = GetSurvivalEval(time);
 
-        // ★ステージ3・4は2回プレイするので、何回目かで入れ先を変える
         if (stagePlayCount == 0)
         {
-            // 1回目 → 惑星1の評価
             resultBaby1 = eval;
         }
         else
         {
-            // 2回目 → 惑星2の評価
             resultBaby2 = eval;
         }
 
         StageClear(stageNumber, resultBaby1, resultBaby2);
     }
+
 
 
 
@@ -418,11 +433,12 @@ public class StageManager1 : MonoBehaviour
 
     int GetSurvivalEval(float time)
     {
-        if (time >= 120f) return 100;   // 120秒生存
-        if (time >= 80f) return 100;   // 80〜120秒で死亡
+        if (time >= 90f) return 100;   // 90秒生存
+        if (time >= 80f) return 100;   // 80〜90秒で死亡
         if (time >= 30f) return 50;    // 30〜80秒で死亡
-        return 0;                       // 0〜30秒で死亡
+        return 0;                      // 0〜30秒で死亡
     }
+
 
 
 
@@ -508,48 +524,92 @@ public class StageManager1 : MonoBehaviour
             currentStage = null;
         }
 
-        // 残っている素材も全部消す
         DestroyStageMaterials();
-
         yield return null;
+
+
+        // ★ここを書き換え
+        if (stageNumber != nextStage + 1)
+        {
+            stagePlayCount = 0;
+        }
 
         LoadStage(nextStage);
 
+        // 黒暗転解除
         yield return StartCoroutine(Fade(blackFade, 1, 0));
 
-        // ステージ1
+        // ★タイマーリセット（これがズレ防止の本丸）
+        PlayerMovement2D player = FindFirstObjectByType<PlayerMovement2D>();
+        if (player != null)
+            player.survivalTime = 0f;
+
+        MaterialSpawner2D spawner = FindFirstObjectByType<MaterialSpawner2D>();
+        if (spawner != null)
+            spawner.Timer11 = 0f;
+
+        // プレイヤー停止
+        if (player != null)
+            player.enabled = false;
+
+        // ★ステージ1：操作説明 → 素材説明
         if (nextStage == 0)
         {
-            yield return StartCoroutine(
-                ShowTutorial(
-                    stage1Control,
-                    stage1Material
-                ));
+            yield return StartCoroutine(ShowTutorial(stage1Control));
+            yield return StartCoroutine(ShowTutorial(stage1Material));
         }
-        // ステージ2
+        // ★ステージ2：素材説明のみ
         else if (nextStage == 1)
         {
-            yield return StartCoroutine(
-                ShowTutorial(
-                    stage2Material
-                ));
+            yield return StartCoroutine(ShowTutorial(stage2Material));
         }
-        // ステージ3だけ説明を出す
+        // ★ステージ3：説明1枚
         else if (nextStage == 2)
         {
             if (!stage3TutorialShown)
             {
                 stage3TutorialShown = true;
-
-                yield return StartCoroutine(
-                    ShowTutorial(
-                        stage34Control
-                    ));
+                yield return StartCoroutine(ShowTutorial(stage34Control));
             }
         }
 
+        // ★START画像を表示
+        startImage.gameObject.SetActive(true);
+
+        Color sc = startImage.color;
+        sc.a = 1f;
+        startImage.color = sc;
+
+        // START を長めに表示
+        yield return new WaitForSecondsRealtime(stageStartTime + 1.5f);
+
+        // START フェードアウト
+        float t = 0f;
+        while (t < stageStartFade)
+        {
+            t += Time.deltaTime;
+            sc.a = Mathf.Lerp(1f, 0f, t / stageStartFade);
+            startImage.color = sc;
+            yield return null;
+        }
+
+        startImage.gameObject.SetActive(false);
+
+        // ★ゲーム開始（ここだけ！2回書かない）
         canSpawn = true;
+        if (player != null)
+            player.enabled = true;
+
+        // ★素材画像をステージに合わせて更新
+        PlayerCollect2D collector = FindFirstObjectByType<PlayerCollect2D>();
+        if (collector != null)
+        {
+            collector.ApplyMaterialImages();
+        }
+
     }
+
+
 
 
     IEnumerator ShowTutorial(params Sprite[] sprites)
