@@ -545,15 +545,16 @@ public class StageManager1 : MonoBehaviour
         Debug.Log("Player = " + player);
         Debug.Log("Player2D = " + player2D);
 
-        // 黒暗転解除
-        yield return StartCoroutine(Fade(blackFade, 1, 0));
-
-        // プレイヤー停止
+        // ★生成された瞬間に停止
         if (player != null)
             player.enabled = false;
 
         if (player2D != null)
             player2D.enabled = false;
+
+        // 黒暗転解除
+        yield return StartCoroutine(Fade(blackFade, 1, 0));
+
 
         canSpawn = false;
 
@@ -616,6 +617,8 @@ public class StageManager1 : MonoBehaviour
             collector.ApplyPlayerSprite();
         }
 
+        canPlayerMove = true;
+
         if (player != null)
             player.enabled = true;
 
@@ -623,7 +626,7 @@ public class StageManager1 : MonoBehaviour
             player2D.enabled = true;
 
         // プレイヤーが動けるようになったあと
-        canPlayerMove = true;
+        
         canSpawn = true;
     }
 
