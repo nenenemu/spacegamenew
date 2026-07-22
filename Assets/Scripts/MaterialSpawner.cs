@@ -44,23 +44,25 @@ public class MaterialSpawner : MonoBehaviour
 
     IEnumerator SpawnLoop()
     {
+        StageManager1 manager = FindFirstObjectByType<StageManager1>();
+
         while (true)
         {
+            while (manager != null && !manager.canSpawn)
+                yield return null;
+
             yield return new WaitForSeconds(Random.Range(minInterval, maxInterval));
 
-            // ★ ランダムレーン選択（親の子）
-            Transform lane = lanes[Random.Range(0, lanes.Length)];
+            if (manager != null && !manager.canSpawn)
+                continue;
 
-            // ★ 素材選択
+            Transform lane = lanes[Random.Range(0, lanes.Length)];
             GameObject prefab = materials[Random.Range(0, materials.Length)];
 
-            // ★ 生成（Stage の子にする）
             GameObject obj = Instantiate(prefab, lane.position, Quaternion.identity, stageRoot);
 
-            // ★ 落下速度
             float speed = Random.Range(minSpeed, maxSpeed);
 
-            // ★ 落下処理
             MaterialFall fall = obj.AddComponent<MaterialFall>();
             fall.speed = speed;
         }

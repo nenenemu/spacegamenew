@@ -520,8 +520,11 @@ public class StageManager1 : MonoBehaviour
 
         canSpawn = false;
 
-        // ★追加
-        PlayerMovement2D player = FindFirstObjectByType<PlayerMovement2D>();
+        // ステージ1・2用
+        //PlayerMovement player = FindFirstObjectByType<PlayerMovement>();
+
+        // ステージ3・4用
+        //PlayerMovement2D player2D = FindFirstObjectByType<PlayerMovement2D>();
 
         // 前のステージを消す
         if (currentStage != null)
@@ -533,8 +536,7 @@ public class StageManager1 : MonoBehaviour
         DestroyStageMaterials();
         yield return null;
 
-
-        // ★ここを書き換え
+        // ステージが変わるならプレイ回数リセット
         if (stageNumber != nextStage + 1)
         {
             stagePlayCount = 0;
@@ -542,13 +544,31 @@ public class StageManager1 : MonoBehaviour
 
         LoadStage(nextStage);
 
+        // プレイヤーが生成されるまで待つ
+        PlayerMovement player = null;
+        PlayerMovement2D player2D = null;
+
+        while (player == null && player2D == null)
+        {
+            player = FindFirstObjectByType<PlayerMovement>();
+            player2D = FindFirstObjectByType<PlayerMovement2D>();
+            yield return null;
+        }
+
+        Debug.Log("Player = " + player);
+        Debug.Log("Player2D = " + player2D);
+
         // 黒暗転解除
         yield return StartCoroutine(Fade(blackFade, 1, 0));
-
 
         // プレイヤー停止
         if (player != null)
             player.enabled = false;
+
+        if (player2D != null)
+            player2D.enabled = false;
+
+        canSpawn = false;
 
         // ★ステージ1：操作説明 → 素材説明
         if (nextStage == 0)
@@ -571,33 +591,25 @@ public class StageManager1 : MonoBehaviour
             }
         }
 
-        // チュートリアル終了
-
-        if (player != null)
-            player.survivalTime = 0f;
+        // ステージ3・4だけタイマーリセット
+        if (player2D != null)
+            player2D.survivalTime = 0f;
 
         MaterialSpawner2D spawner = FindFirstObjectByType<MaterialSpawner2D>();
         if (spawner != null)
             spawner.Timer11 = 0f;
 
-        canSpawn = true;
-        if (player != null)
-            player.enabled = true;
-
-        // ★START画像
-        startImage.gameObject.SetActive(true);
-
-        // ★START画像を表示
+        // START画像表示
         startImage.gameObject.SetActive(true);
 
         Color sc = startImage.color;
         sc.a = 1f;
         startImage.color = sc;
 
-        // START を長めに表示
+        // START表示
         yield return new WaitForSecondsRealtime(stageStartTime + 1.5f);
 
-        // START フェードアウト
+        // STARTフェードアウト
         float t = 0f;
         while (t < stageStartFade)
         {
@@ -609,14 +621,21 @@ public class StageManager1 : MonoBehaviour
 
         startImage.gameObject.SetActive(false);
 
-
-        // ★素材画像をステージに合わせて更新
+        // 素材画像更新
         PlayerCollect2D collector = FindFirstObjectByType<PlayerCollect2D>();
         if (collector != null)
         {
             collector.ApplyMaterialImages();
         }
 
+        // ===== ここからゲーム開始 =====
+        canSpawn = true;
+
+        if (player != null)
+            player.enabled = true;
+
+        if (player2D != null)
+            player2D.enabled = true;
     }
 
 
