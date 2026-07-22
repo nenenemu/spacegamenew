@@ -24,12 +24,21 @@ public class MaterialSpawner2D : MonoBehaviour
         StartCoroutine(SpawnLoop());
     }
 
+
+
     private void Update()
     {
+        // ★経過時間を加算
         Timer11 += Time.deltaTime;
 
-        debugText.text = ("Timer: " + Timer11.ToString());
+        // ★残り時間を計算（120秒固定ならここで指定）
+        float remaining = 120f - Timer11;
+        if (remaining < 0) remaining = 0;
+
+        // ★整数だけ表示
+        debugText.text = ((int)remaining).ToString();
     }
+
 
     IEnumerator SpawnLoop()
     {

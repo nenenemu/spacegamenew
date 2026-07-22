@@ -56,9 +56,9 @@ public class PlayerCollect2D : MonoBehaviour
         bool isCorrect = stageManager.IsCorrectMaterial(index);
 
         if (isCorrect)
-            player.Heal(20);
+            player.Heal(10);
         else
-            player.Damage(30);
+            player.Damage(20);
 
         Destroy(col.gameObject);
     }

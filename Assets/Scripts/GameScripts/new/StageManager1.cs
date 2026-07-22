@@ -1,13 +1,24 @@
+ï»¿using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Video;
 using UnityEngine.UI;
-using System.Collections;
+using UnityEngine.Video;
+
+
+[System.Serializable]
+public class ResultImageSet
+{
+    public Sprite[] images = new Sprite[2];
+    // images[0] = 1å›ç›®ã®ç”»åƒ
+    // images[1] = 2å›ç›®ã®ç”»åƒ
+}
+
 
 [System.Serializable]
 public class BabyMovieData
 {
     public string babyName;
-    public VideoClip[] movies = new VideoClip[3]; // 0’á 1’† 2‚
+    public VideoClip[] movies = new VideoClip[3]; // 0ä½ 1ä¸­ 2é«˜
 }
 
 [System.Serializable]
@@ -21,12 +32,18 @@ public class StageResultMovie
 [System.Serializable]
 public class StageMaterialRule
 {
-    public bool[] correct1st = new bool[8];   // ƒXƒe[ƒW1‰ñ–Ú‚Ì³‰ğ‘fŞ
-    public bool[] correct2nd = new bool[8];   // ƒXƒe[ƒW2‰ñ–Ú‚Ì³‰ğ‘fŞ
+    public bool[] correct1st = new bool[8];   // ã‚¹ãƒ†ãƒ¼ã‚¸1å›ç›®ã®æ­£è§£ç´ æ
+    public bool[] correct2nd = new bool[8];   // ã‚¹ãƒ†ãƒ¼ã‚¸2å›ç›®ã®æ­£è§£ç´ æ
 }
 
 public class StageManager1 : MonoBehaviour
 {
+    public ResultImageSet[] resultImageSets;   // â˜…ã‚¹ãƒ†ãƒ¼ã‚¸ã”ã¨ã«2æšãšã¤å…¥ã‚Œã‚‹
+   
+
+    public Image resultImage;   // â˜…RawImage ã®å­ã«ç½®ã„ãŸ Image ã‚’ã“ã“ã«å…¥ã‚Œã‚‹
+
+
     private bool stage3TutorialShown = false;
     private bool stage4TutorialShown = false;
 
@@ -56,7 +73,7 @@ public class StageManager1 : MonoBehaviour
 
     public StageResultMovie[] resultMovies;
 
-    public StageMaterialRule[] materialRules;   // šƒXƒe[ƒW‚²‚Æ‚Ì³‰ğ‘fŞƒZƒbƒg
+    public StageMaterialRule[] materialRules;   // â˜…ã‚¹ãƒ†ãƒ¼ã‚¸ã”ã¨ã®æ­£è§£ç´ æã‚»ãƒƒãƒˆ
 
     public GameObject[] stagePrefabs;
     public Transform stageRoot;
@@ -67,7 +84,7 @@ public class StageManager1 : MonoBehaviour
     private int resultBaby1;
     private int resultBaby2;
 
-    public int stagePlayCount = 0;  // šƒXƒe[ƒW3E4‚ğ2‰ñƒvƒŒƒC‚·‚é‚½‚ß
+    public int stagePlayCount = 0;  // â˜…ã‚¹ãƒ†ãƒ¼ã‚¸3ãƒ»4ã‚’2å›ãƒ—ãƒ¬ã‚¤ã™ã‚‹ãŸã‚
 
     public VideoPlayer videoPlayer;
     public RawImage movieImage;
@@ -78,7 +95,7 @@ public class StageManager1 : MonoBehaviour
     public Image blackFade;
     public float fadeTime = 1f;
 
-    // šSTART‰æ‘œ
+    // â˜…STARTç”»åƒ
     public Image startImage;
 
     void Start()
@@ -120,7 +137,7 @@ public class StageManager1 : MonoBehaviour
     {
         stageNumber = index + 1;
 
-        // š’Ç‰Á
+        // â˜…è¿½åŠ 
         if (stageNumber == 3 || stageNumber == 4)
             showStart = true;
 
@@ -130,7 +147,7 @@ public class StageManager1 : MonoBehaviour
         currentStage = Instantiate(stagePrefabs[index], stageRoot);
     }
 
-    // š‘fŞ³‰ğ”»’èiPlayerMovement2D ‚©‚çŒÄ‚Î‚ê‚éj
+    // â˜…ç´ ææ­£è§£åˆ¤å®šï¼ˆPlayerMovement2D ã‹ã‚‰å‘¼ã°ã‚Œã‚‹ï¼‰
     public bool IsCorrectMaterial(int materialIndex)
     {
         int stageIdx = stageNumber - 1;
@@ -148,7 +165,7 @@ public class StageManager1 : MonoBehaviour
 
         DestroyAllMaterials();
 
-        // šƒXƒe[ƒW3E4‚Í2‰ñƒvƒŒƒC‚µ‚Ä‚©‚çƒŠƒUƒ‹ƒg
+        // â˜…ã‚¹ãƒ†ãƒ¼ã‚¸3ãƒ»4ã¯2å›ãƒ—ãƒ¬ã‚¤ã—ã¦ã‹ã‚‰ãƒªã‚¶ãƒ«ãƒˆ
         if (stageNumber == 3 || stageNumber == 4)
         {
             stagePlayCount++;
@@ -162,7 +179,7 @@ public class StageManager1 : MonoBehaviour
             else
             {
                 stagePlayCount = 0;
-                showStart = false;   // š2‰ñ–ÚI—¹Œã‚ÍSTART‚ğo‚³‚È‚¢
+                showStart = false;   // â˜…2å›ç›®çµ‚äº†å¾Œã¯STARTã‚’å‡ºã•ãªã„
             }
         }
 
@@ -183,33 +200,33 @@ public class StageManager1 : MonoBehaviour
         return 2;
     }
 
-    // šƒXƒe[ƒW3E4‚ÌŠÔ‚Ì‰‰oi‹‘å‰»‚È‚µj
+    // â˜…ã‚¹ãƒ†ãƒ¼ã‚¸3ãƒ»4ã®é–“ã®æ¼”å‡ºï¼ˆå·¨å¤§åŒ–ãªã—ï¼‰
     IEnumerator StageTransitionEffect()
     {
         canSpawn = false;
 
-        // ƒS[ƒ‹‰æ‘œ‚ªo‚Ä‚¢‚½‚ç­‚µ‘Ò‚Á‚Ä‚©‚çÁ‚·
+        // ã‚´ãƒ¼ãƒ«ç”»åƒãŒå‡ºã¦ã„ãŸã‚‰å°‘ã—å¾…ã£ã¦ã‹ã‚‰æ¶ˆã™
         if (goalImage != null && goalImage.activeSelf)
         {
             yield return new WaitForSeconds(2f);
             goalImage.SetActive(false);
         }
-        // ˆÃ“]
+        // æš—è»¢
         yield return StartCoroutine(Fade(blackFade, 0, 1));
 
-        // šˆÃ“]‚µ‚½‚Ü‚Ü1•b‘Ò‚Â
+        // â˜…æš—è»¢ã—ãŸã¾ã¾1ç§’å¾…ã¤
         yield return new WaitForSecondsRealtime(1f);
 
-        // “¯‚¶ƒXƒe[ƒW‚ğ‚à‚¤ˆê“xƒ[ƒh
+        // åŒã˜ã‚¹ãƒ†ãƒ¼ã‚¸ã‚’ã‚‚ã†ä¸€åº¦ãƒ­ãƒ¼ãƒ‰
         LoadStage(stageNumber - 1);
         DestroyStageMaterials();
 
-        // šƒ[ƒhŒã‚àˆÃ“]‚µ‚½‚Ü‚Ü0.5•b‘Ò‚Â
+        // â˜…ãƒ­ãƒ¼ãƒ‰å¾Œã‚‚æš—è»¢ã—ãŸã¾ã¾0.5ç§’å¾…ã¤
         yield return new WaitForSecondsRealtime(0.5f);
-        // –¾“]
+        // æ˜è»¢
         yield return StartCoroutine(Fade(blackFade, 1, 0));
 
-        // ƒQ[ƒ€‚Í‚Ü‚¾~‚ß‚é
+        // ã‚²ãƒ¼ãƒ ã¯ã¾ã æ­¢ã‚ã‚‹
         canSpawn = false;
 
         if (showStart)
@@ -217,10 +234,10 @@ public class StageManager1 : MonoBehaviour
             stageStartImage.gameObject.SetActive(true);
 
             Color c = stageStartImage.color;
-            c.a = 0f; // © ‚±‚±‚ğ’Ç‰Áid—vj
+            c.a = 0f; // â† ã“ã“ã‚’è¿½åŠ ï¼ˆé‡è¦ï¼‰
             stageStartImage.color = c;
 
-            // ‚±‚±‚©‚çƒtƒF[ƒhƒCƒ“
+            // ã“ã“ã‹ã‚‰ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³
             yield return new WaitForSecondsRealtime(stageStartTime);
 
             float t = 0f;
@@ -238,7 +255,7 @@ public class StageManager1 : MonoBehaviour
         }
 
 
-        // ‚±‚±‚ÅƒQ[ƒ€ŠJn
+        // ã“ã“ã§ã‚²ãƒ¼ãƒ é–‹å§‹
         canSpawn = true;
     }
 
@@ -273,6 +290,11 @@ public class StageManager1 : MonoBehaviour
 
         movieImage.gameObject.SetActive(true);
 
+        // â˜…1å›ç›®ã®ç”»åƒã‚’è¡¨ç¤ºï¼ˆRawImage ã®å­ Imageï¼‰
+        resultImage.sprite = resultImageSets[nextStage - 1].images[0];
+        resultImage.gameObject.SetActive(true);
+
+
         videoPlayer.clip =
             resultMovies[nextStage - 1].baby1.movies[
                 GetResult(resultBaby1)
@@ -291,6 +313,10 @@ public class StageManager1 : MonoBehaviour
         videoPlayer.Play();
         while (videoPlayer.isPlaying)
             yield return null;
+
+        // â˜…2å›ç›®ã®ç”»åƒã«åˆ‡ã‚Šæ›¿ãˆ
+        resultImage.sprite = resultImageSets[nextStage - 1].images[1];
+
 
         yield return StartCoroutine(
             PlayMovie(
@@ -344,36 +370,62 @@ public class StageManager1 : MonoBehaviour
         img.color = c;
     }
 
-    // š120•b¶‘¶ ¨ ’áƒ“xˆµ‚¢
+    // â˜…120ç§’ç”Ÿå­˜ â†’ ä½ç´”åº¦æ‰±ã„
+    // â˜…120ç§’ç”Ÿå­˜æ™‚
     public void PlayerSurvivedFullTime()
     {
-        resultBaby1 = 0;
-        resultBaby2 = 0;
+        float time = 120f;
+        int eval = GetSurvivalEval(time);
 
-        StageClear(stageNumber, resultBaby1, resultBaby2);
-    }
-
-    // š€–S‚ÌŠÔ•ªŠò
-    public void PlayerDiedInSurvivalStage(float time)
-    {
-        if (time < 30f)
+        // â˜…ã‚¹ãƒ†ãƒ¼ã‚¸3ãƒ»4ã¯2å›ãƒ—ãƒ¬ã‚¤ã™ã‚‹ã®ã§ã€ä½•å›ç›®ã‹ã§å…¥ã‚Œå…ˆã‚’å¤‰ãˆã‚‹
+        if (stagePlayCount == 0)
         {
-            resultBaby1 = 100;
-            resultBaby2 = 100;
-        }
-        else if (time < 90f)
-        {
-            resultBaby1 = 50;
-            resultBaby2 = 50;
+            // 1å›ç›® â†’ æƒ‘æ˜Ÿ1ã®è©•ä¾¡
+            resultBaby1 = eval;
         }
         else
         {
-            resultBaby1 = 0;
-            resultBaby2 = 0;
+            // 2å›ç›® â†’ æƒ‘æ˜Ÿ2ã®è©•ä¾¡
+            resultBaby2 = eval;
         }
 
         StageClear(stageNumber, resultBaby1, resultBaby2);
     }
+
+
+
+
+    // â˜…æ­»äº¡æ™‚ã®æ™‚é–“åˆ†å²
+    // â˜…æ­»äº¡æ™‚ã®æ™‚é–“åˆ†å²
+    public void PlayerDiedInSurvivalStage(float time)
+    {
+        int eval = GetSurvivalEval(time);
+
+        if (stagePlayCount == 0)
+        {
+            // 1å›ç›® â†’ æƒ‘æ˜Ÿ1ã®è©•ä¾¡
+            resultBaby1 = eval;
+        }
+        else
+        {
+            // 2å›ç›® â†’ æƒ‘æ˜Ÿ2ã®è©•ä¾¡
+            resultBaby2 = eval;
+        }
+
+        StageClear(stageNumber, resultBaby1, resultBaby2);
+    }
+
+
+    int GetSurvivalEval(float time)
+    {
+        if (time >= 120f) return 100;   // 120ç§’ç”Ÿå­˜
+        if (time >= 80f) return 100;   // 80ã€œ120ç§’ã§æ­»äº¡
+        if (time >= 30f) return 50;    // 30ã€œ80ç§’ã§æ­»äº¡
+        return 0;                       // 0ã€œ30ç§’ã§æ­»äº¡
+    }
+
+
+
 
     void DestroyStageMaterials()
     {
@@ -403,14 +455,14 @@ public class StageManager1 : MonoBehaviour
     {
         canSpawn = false;
 
-        // ”’‰æ‘œ‚ğ•\¦
+        // ç™½ç”»åƒã‚’è¡¨ç¤º
         stageStartImage.gameObject.SetActive(true);
 
         Color c = stageStartImage.color;
         c.a = 1f;
         stageStartImage.color = c;
 
-        // ”’¨“§–¾
+        // ç™½â†’é€æ˜
         float t = 0f;
         while (t < stageStartFade)
         {
@@ -422,7 +474,7 @@ public class StageManager1 : MonoBehaviour
 
         stageStartImage.gameObject.SetActive(false);
 
-        // START‰æ‘œ
+        // STARTç”»åƒ
         startImage.gameObject.SetActive(true);
 
         Color sc = startImage.color;
@@ -449,14 +501,14 @@ public class StageManager1 : MonoBehaviour
     {
         canSpawn = false;
 
-        // ‘O‚ÌƒXƒe[ƒW‚ğÁ‚·
+        // å‰ã®ã‚¹ãƒ†ãƒ¼ã‚¸ã‚’æ¶ˆã™
         if (currentStage != null)
         {
             Destroy(currentStage);
             currentStage = null;
         }
 
-        // c‚Á‚Ä‚¢‚é‘fŞ‚à‘S•”Á‚·
+        // æ®‹ã£ã¦ã„ã‚‹ç´ æã‚‚å…¨éƒ¨æ¶ˆã™
         DestroyStageMaterials();
 
         yield return null;
@@ -465,7 +517,7 @@ public class StageManager1 : MonoBehaviour
 
         yield return StartCoroutine(Fade(blackFade, 1, 0));
 
-        // ƒXƒe[ƒW1
+        // ã‚¹ãƒ†ãƒ¼ã‚¸1
         if (nextStage == 0)
         {
             yield return StartCoroutine(
@@ -474,7 +526,7 @@ public class StageManager1 : MonoBehaviour
                     stage1Material
                 ));
         }
-        // ƒXƒe[ƒW2
+        // ã‚¹ãƒ†ãƒ¼ã‚¸2
         else if (nextStage == 1)
         {
             yield return StartCoroutine(
@@ -482,7 +534,7 @@ public class StageManager1 : MonoBehaviour
                     stage2Material
                 ));
         }
-        // ƒXƒe[ƒW3‚¾‚¯à–¾‚ğo‚·
+        // ã‚¹ãƒ†ãƒ¼ã‚¸3ã ã‘èª¬æ˜ã‚’å‡ºã™
         else if (nextStage == 2)
         {
             if (!stage3TutorialShown)
