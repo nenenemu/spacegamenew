@@ -30,19 +30,23 @@ public class MaterialSpawner2D : MonoBehaviour
     {
         StageManager1 sm = FindFirstObjectByType<StageManager1>();
 
-        // ★ステージがまだ始まっていないならタイマーを動かさない
-        if (sm == null || !sm.canSpawn)
+        // STARTが消えるまでタイマーを止める
+        if (sm == null || !sm.canPlayerMove)
             return;
 
-        // ★経過時間を加算
         Timer11 += Time.deltaTime;
 
-        // ★残り時間を計算（90秒固定）
         float remaining = 90f - Timer11;
-        if (remaining < 0) remaining = 0;
+        if (remaining < 0)
+            remaining = 0;
 
-        // ★整数だけ表示
         debugText.text = ((int)remaining).ToString();
+
+        if (Timer11 >= 90f)
+        {
+            Timer11 = 90f;
+            sm.PlayerSurvivedFullTime();
+        }
     }
 
 
@@ -54,7 +58,7 @@ public class MaterialSpawner2D : MonoBehaviour
         {
             StageManager1 sm = FindFirstObjectByType<StageManager1>();
 
-            if (sm == null || sm.canSpawn)
+            if (sm != null && sm.canSpawn && sm.canPlayerMove)
             {
                 Spawn();
             }

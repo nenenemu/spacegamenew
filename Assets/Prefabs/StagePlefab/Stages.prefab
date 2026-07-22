@@ -1419,7 +1419,7 @@ GameObject:
   - component: {fileID: 6737552070444948348}
   m_Layer: 0
   m_Name: yuka
-  m_TagString: Untagged
+  m_TagString: Goal1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

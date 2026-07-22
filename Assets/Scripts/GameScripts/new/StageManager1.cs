@@ -38,6 +38,8 @@ public class StageMaterialRule
 
 public class StageManager1 : MonoBehaviour
 {
+
+
     public ResultImageSet[] resultImageSets;   // ★ステージごとに2枚ずつ入れる
    
 
@@ -63,6 +65,9 @@ public class StageManager1 : MonoBehaviour
 
     [HideInInspector]
     public bool canSpawn = false;
+
+    [HideInInspector]
+    public bool canPlayerMove = false;
 
     public int stageNumber = 1;
 
@@ -219,60 +224,28 @@ public class StageManager1 : MonoBehaviour
     {
         Debug.Log("StageTransitionEffect");
 
+        // 完全停止
         canSpawn = false;
+        canPlayerMove = false;
 
-        // ゴール画像が出ていたら少し待ってから消す
+        // ゴール表示が残っていたら少し待つ
         if (goalImage != null && goalImage.activeSelf)
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSecondsRealtime(2f);
             goalImage.SetActive(false);
         }
+
+        // 素材削除
+        DestroyStageMaterials();
+
         // 暗転
         yield return StartCoroutine(Fade(blackFade, 0, 1));
 
-        // ★暗転したまま1秒待つ
+        // 少し待つ
         yield return new WaitForSecondsRealtime(1f);
 
-        // 同じステージをもう一度ロード
-        LoadStage(stageNumber - 1);
-        DestroyStageMaterials();
-
-        // ★ロード後も暗転したまま0.5秒待つ
-        yield return new WaitForSecondsRealtime(0.5f);
-        // 明転
-        yield return StartCoroutine(Fade(blackFade, 1, 0));
-
-        // ゲームはまだ止める
-        canSpawn = false;
-
-        if (showStart)
-        {
-            stageStartImage.gameObject.SetActive(true);
-
-            Color c = stageStartImage.color;
-            c.a = 0f; // ← ここを追加（重要）
-            stageStartImage.color = c;
-
-            // ここからフェードイン
-            yield return new WaitForSecondsRealtime(stageStartTime);
-
-            float t = 0f;
-            while (t < stageStartFade)
-            {
-                t += Time.deltaTime;
-                c.a = Mathf.Lerp(1f, 0f, t / stageStartFade);
-                stageStartImage.color = c;
-                yield return null;
-            }
-
-            c.a = 0f;
-            stageStartImage.color = c;
-            stageStartImage.gameObject.SetActive(false);
-        }
-
-
-        // ここでゲーム開始
-        canSpawn = true;
+        // 同じステージをもう一度開始
+        StartCoroutine(BeginStage(stageNumber - 1));
     }
 
 
@@ -516,6 +489,9 @@ public class StageManager1 : MonoBehaviour
 
     public IEnumerator BeginStage(int nextStage)
     {
+        canSpawn = false;
+        canPlayerMove = false;
+
         Debug.Log("BeginStage");
 
         canSpawn = false;
@@ -628,14 +604,15 @@ public class StageManager1 : MonoBehaviour
             collector.ApplyMaterialImages();
         }
 
-        // ===== ここからゲーム開始 =====
-        canSpawn = true;
-
         if (player != null)
             player.enabled = true;
 
         if (player2D != null)
             player2D.enabled = true;
+
+        // プレイヤーが動けるようになったあと
+        canPlayerMove = true;
+        canSpawn = true;
     }
 
 
