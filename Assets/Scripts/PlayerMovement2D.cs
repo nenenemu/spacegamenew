@@ -88,12 +88,13 @@ public class PlayerMovement2D : MonoBehaviour
         // 経過時間を加算
         survivalTime += Time.deltaTime;
 
-        // ★終了判定はこれ1つだけでOK
         if (survivalTime >= limitTime)
         {
-            stageManager.isTimeOver = true;
+            stageManager.canSpawn = false;   // ★追加
+            enabled = false;                 // ★追加
+
             stageManager.PlayerSurvivedFullTime();
-            return; // ★これ重要：二重判定防止
+            return;
         }
 
         //=========================

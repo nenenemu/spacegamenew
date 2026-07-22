@@ -2957,7 +2957,7 @@ RectTransform:
   m_GameObject: {fileID: 330501776}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5068686, y: 0.29994, z: 0.29994}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1422327332}
@@ -2987,7 +2987,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 454665865, guid: ad38df0ac8d850346b6a8140fc6c23ce, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9599,6 +9599,7 @@ MonoBehaviour:
   stageStartFade: 1
   canSpawn: 0
   stageNumber: 1
+  isTimeOver: 0
   timeOverImage: {fileID: 1855766609}
   resultMovies:
   - stageName: Stage1

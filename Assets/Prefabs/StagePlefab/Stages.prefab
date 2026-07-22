@@ -4125,6 +4125,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1501450733829232137}
     m_Modifications:
+    - target: {fileID: 42373334175508903, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 42373334175508903, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 42373334175508903, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.19
+      objectReference: {fileID: 0}
     - target: {fileID: 108331207919539545, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -4165,6 +4177,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3198300734267810068, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -167874063, guid: 6f7b49b665d403c429e2fa47e47b2e85, type: 3}
     - target: {fileID: 5517065541002613205, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: m_Name
       value: Player

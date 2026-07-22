@@ -344,6 +344,8 @@ public class StageManager1 : MonoBehaviour
 
         kaiwa.SetFinishEvent(() =>
         {
+            isTimeOver = false;
+
             StartCoroutine(BeginStage(nextStage));
             isResultRunning = false;
         });
@@ -388,20 +390,17 @@ public class StageManager1 : MonoBehaviour
     // ★120秒生存時
     public void PlayerSurvivedFullTime()
     {
-        // ★実際に生き残った時間を使う
+        isTimeOver = true;
+
         PlayerMovement2D player = FindFirstObjectByType<PlayerMovement2D>();
         float time = player != null ? player.survivalTime : 90f;
 
         int eval = GetSurvivalEval(time);
 
         if (stagePlayCount == 0)
-        {
             resultBaby1 = eval;
-        }
         else
-        {
             resultBaby2 = eval;
-        }
 
         StageClear(stageNumber, resultBaby1, resultBaby2);
     }
