@@ -217,6 +217,8 @@ public class StageManager1 : MonoBehaviour
     // ★ステージ3・4の間の演出（巨大化なし）
     IEnumerator StageTransitionEffect()
     {
+        Debug.Log("StageTransitionEffect");
+
         canSpawn = false;
 
         // ゴール画像が出ていたら少し待ってから消す
@@ -514,7 +516,12 @@ public class StageManager1 : MonoBehaviour
 
     public IEnumerator BeginStage(int nextStage)
     {
+        Debug.Log("BeginStage");
+
         canSpawn = false;
+
+        // ★追加
+        PlayerMovement2D player = FindFirstObjectByType<PlayerMovement2D>();
 
         // 前のステージを消す
         if (currentStage != null)
@@ -538,14 +545,6 @@ public class StageManager1 : MonoBehaviour
         // 黒暗転解除
         yield return StartCoroutine(Fade(blackFade, 1, 0));
 
-        // ★タイマーリセット（これがズレ防止の本丸）
-        PlayerMovement2D player = FindFirstObjectByType<PlayerMovement2D>();
-        if (player != null)
-            player.survivalTime = 0f;
-
-        MaterialSpawner2D spawner = FindFirstObjectByType<MaterialSpawner2D>();
-        if (spawner != null)
-            spawner.Timer11 = 0f;
 
         // プレイヤー停止
         if (player != null)
@@ -572,6 +571,22 @@ public class StageManager1 : MonoBehaviour
             }
         }
 
+        // チュートリアル終了
+
+        if (player != null)
+            player.survivalTime = 0f;
+
+        MaterialSpawner2D spawner = FindFirstObjectByType<MaterialSpawner2D>();
+        if (spawner != null)
+            spawner.Timer11 = 0f;
+
+        canSpawn = true;
+        if (player != null)
+            player.enabled = true;
+
+        // ★START画像
+        startImage.gameObject.SetActive(true);
+
         // ★START画像を表示
         startImage.gameObject.SetActive(true);
 
@@ -594,10 +609,6 @@ public class StageManager1 : MonoBehaviour
 
         startImage.gameObject.SetActive(false);
 
-        // ★ゲーム開始（ここだけ！2回書かない）
-        canSpawn = true;
-        if (player != null)
-            player.enabled = true;
 
         // ★素材画像をステージに合わせて更新
         PlayerCollect2D collector = FindFirstObjectByType<PlayerCollect2D>();
