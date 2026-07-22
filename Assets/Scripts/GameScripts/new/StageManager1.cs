@@ -140,18 +140,21 @@ public class StageManager1 : MonoBehaviour
 
     public void LoadStage(int index)
     {
-        // ステージ番号を更新
         stageNumber = index + 1;
 
-        // START画像を出すかどうか
-        if (stageNumber == 3 || stageNumber == 4)
-            showStart = true;
 
-        // 既存ステージ削除
+        if (stageNumber == 3 || stageNumber == 4)
+        {
+            if (stagePlayCount == 0)
+                showStart = true;
+            else
+                showStart = false;
+        }
+
+
         if (currentStage != null)
             Destroy(currentStage);
 
-        // 新しいステージをロード
         currentStage = Instantiate(stagePrefabs[index], stageRoot);
     }
 
@@ -169,26 +172,38 @@ public class StageManager1 : MonoBehaviour
 
     public void StageClear(int nextStage, int baby1, int baby2)
     {
+        Debug.Log(
+        "StageClear stageNumber=" + stageNumber +
+        " stagePlayCount=" + stagePlayCount +
+        " nextStage=" + nextStage
+    );
+
         resultBaby1 = baby1;
         resultBaby2 = baby2;
 
         DestroyAllMaterials();
 
-        // ★ステージ3・4は2回プレイしてからリザルト
         if (stageNumber == 3 || stageNumber == 4)
         {
             stagePlayCount++;
 
+            // 1回目終了 → もう一度ステージ生成
             if (stagePlayCount < 2)
             {
                 showStart = true;
                 StartCoroutine(StageTransitionEffect());
                 return;
             }
+
+            // 2回目終了 → リザルトへ
             else
             {
                 stagePlayCount = 0;
-                showStart = false;   // ★2回目終了後はSTARTを出さない
+                showStart = false;
+
+                // ★追加
+                canSpawn = false;
+                canPlayerMove = false;
             }
         }
 
@@ -222,18 +237,19 @@ public class StageManager1 : MonoBehaviour
     // ★ステージ3・4の間の演出（巨大化なし）
     IEnumerator StageTransitionEffect()
     {
+
         Debug.Log("StageTransitionEffect");
 
-        // 完全停止
         canSpawn = false;
         canPlayerMove = false;
 
-        // ゴール表示が残っていたら少し待つ
+
         if (goalImage != null && goalImage.activeSelf)
         {
             yield return new WaitForSecondsRealtime(2f);
             goalImage.SetActive(false);
         }
+
 
         // 素材削除
         DestroyStageMaterials();
@@ -241,11 +257,16 @@ public class StageManager1 : MonoBehaviour
         // 暗転
         yield return StartCoroutine(Fade(blackFade, 0, 1));
 
-        // 少し待つ
+
+        // 暗転中にステージ再生成
         yield return new WaitForSecondsRealtime(1f);
 
-        // 同じステージをもう一度開始
-        StartCoroutine(BeginStage(stageNumber - 1));
+        if (stagePlayCount == 1)
+        {
+            StartCoroutine(BeginStage(stageNumber - 1));
+        }
+        Debug.Log("★ StageTransitionEffect終了");
+
     }
 
 
@@ -256,13 +277,10 @@ public class StageManager1 : MonoBehaviour
 
         isResultRunning = true;
 
-        if (!isTimeOver)
-        {
-            if (goalImage != null)
-                goalImage.SetActive(true);
+        if (goalImage != null)
+            goalImage.SetActive(true);
 
-            yield return new WaitForSecondsRealtime(2f);
-        }
+        yield return new WaitForSecondsRealtime(2f);
 
         foreach (GameObject obj in hideUIObjects)
             if (obj != null) obj.SetActive(false);
@@ -325,7 +343,9 @@ public class StageManager1 : MonoBehaviour
             isResultRunning = false;
         });
 
+        Debug.Log("会話開始前");
         kaiwa.StartKaiwa("Stage" + nextStage + "_Clear");
+        Debug.Log("★ ResultSequence終了");
     }
 
     IEnumerator PlayMovie(VideoClip clip)
@@ -365,17 +385,18 @@ public class StageManager1 : MonoBehaviour
     // ★120秒生存時
     public void PlayerSurvivedFullTime()
     {
-        isTimeOver = true;
-
         PlayerMovement2D player = FindFirstObjectByType<PlayerMovement2D>();
+
         float time = player != null ? player.survivalTime : 90f;
 
         int eval = GetSurvivalEval(time);
+
 
         if (stagePlayCount == 0)
             resultBaby1 = eval;
         else
             resultBaby2 = eval;
+
 
         StageClear(stageNumber, resultBaby1, resultBaby2);
     }
@@ -419,25 +440,13 @@ public class StageManager1 : MonoBehaviour
 
     void DestroyStageMaterials()
     {
-        string[] tags =
-        {
-        "Si",
-        "C",
-        "He",
-        "H",
-        "Mg",
-        "N",
-        "Fe",
-        "Ni",
-        "O"
-    };
+        MaterialMove2D[] mats =
+            FindObjectsByType<MaterialMove2D>(FindObjectsSortMode.None);
 
-        foreach (string tag in tags)
-        {
-            GameObject[] objs = GameObject.FindGameObjectsWithTag(tag);
 
-            foreach (GameObject obj in objs)
-                Destroy(obj);
+        foreach (MaterialMove2D m in mats)
+        {
+            Destroy(m.gameObject);
         }
     }
 
@@ -489,6 +498,8 @@ public class StageManager1 : MonoBehaviour
 
     public IEnumerator BeginStage(int nextStage)
     {
+        Debug.Log("★ BeginStage 呼ばれた nextStage=" + nextStage);
+
         canSpawn = false;
         canPlayerMove = false;
 
