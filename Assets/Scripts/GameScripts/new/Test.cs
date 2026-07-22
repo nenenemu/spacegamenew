@@ -322,6 +322,17 @@ public class Test : MonoBehaviour
         Vector2 startPos = img.rectTransform.anchoredPosition;
         Vector2 endPos = startPos + Vector2.right * slideDistance;
 
+        // ★最後のページだけはスライドしない
+        if (sibaiIndex == sibai.Length - 1)
+        {
+            sibaiMove = true;
+
+            // ボタンが押されたら少し待って動画
+            StartCoroutine(StartEndingMovie());
+
+            yield break;
+        }
+
 
         float time = 0;
 
@@ -386,7 +397,8 @@ public class Test : MonoBehaviour
         stageManager.kaiwa.SetFinishEvent(() =>
         {
             BGMManager.Instance.PlayGame();
-            stageManager.LoadStage(0);
+
+            StartCoroutine(stageManager.BeginStage(0));
         });
 
         kamikaiwaScript.StartKaiwa("Start");
@@ -517,27 +529,38 @@ public class Test : MonoBehaviour
     {
         BGMManager.Instance.StartOpeningMovie();
 
-        state = State.FadeIn;
+        // 黒フェードを有効化
+        fadeImage.gameObject.SetActive(true);
 
-        // フェードイン（透明→不透明）
+        // ① 黒フェードIN（0 → 1）
         yield return StartCoroutine(Fade(0f, 1f, fadeTime));
 
-        videoPlayer.clip = openingMovie;
-
-        // 動画を0秒で停止した状態にする
+        // ② 黒が完全に1になった瞬間に画面切り替え
+        taiki.gameObject.SetActive(false);
+        titleImage.gameObject.SetActive(false);
         movieImage.gameObject.SetActive(true);
+
+        // ③ 動画の最初のフレームを準備
+        videoPlayer.clip = openingMovie;
         videoPlayer.time = 0;
         videoPlayer.Play();
-        videoPlayer.Pause();   // ← 0秒の画面で停止
+        videoPlayer.Pause();   // 最初のフレームで止める
 
-        // フェードアウト（不透明→透明）
-        state = State.FadeOut;
+        // ★★★ ここで state を移動させる（重要） ★★★
+        state = State.StartMovie;
+
+        // ★★★ RawImage が描画されるまで 1 フレーム待つ ★★★
+        yield return null;
+
+        // ④ 黒フェードOUT（1 → 0）
         yield return StartCoroutine(Fade(1f, 0f, fadeTime));
 
-        // 完全に透明になったら動画再生
-        state = State.StartMovie;
+        // ⑤ 黒が完全に透明になったら動画再生
         videoPlayer.Play();
     }
+
+
+
 
     IEnumerator MovieEndToTitle()
     {
@@ -643,7 +666,8 @@ public class Test : MonoBehaviour
 
     IEnumerator StartEndingMovie()
     {
-        yield return new WaitForSeconds(0.5f);
+        // 最後の絵を見せる時間
+        yield return new WaitForSeconds(2f);
 
         state = State.EndMovie;
 
@@ -657,11 +681,8 @@ public class Test : MonoBehaviour
 
         videoPlayer.clip = endingMovie;
 
-        // 最初のイベントを消す
         videoPlayer.loopPointReached -= MovieEnd;
         videoPlayer.loopPointReached -= EndingMovieEnd;
-
-        // 最後用イベント
         videoPlayer.loopPointReached += EndingMovieEnd;
 
         videoPlayer.Play();

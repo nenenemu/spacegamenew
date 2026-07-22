@@ -284,7 +284,7 @@ public class kamikaiwaScript : MonoBehaviour
     }
 
 
-    void EndKaiwa()
+    /*void EndKaiwa()
     {
         kaiwaBool = false;
 
@@ -298,6 +298,25 @@ public class kamikaiwaScript : MonoBehaviour
         }
 
         BGMManager.Instance.StopBGM();   // ←追加
+
+        OnDialogueFinished?.Invoke();
+        OnDialogueFinished = null;
+    }*/
+
+    void EndKaiwa()
+    {
+        kaiwaBool = false;
+
+        foreach (var p in current.pages)
+            p.pageImage.gameObject.SetActive(false);
+
+        if (current.kaiwaName == "Stage4_Clear")
+        {
+            endingManager.StartEnding();
+            return;
+        }
+
+        BGMManager.Instance.StopBGM();
 
         OnDialogueFinished?.Invoke();
         OnDialogueFinished = null;
@@ -345,6 +364,49 @@ public class kamikaiwaScript : MonoBehaviour
         isErasing = true;
     }
 
-    
+    /*IEnumerator FadeEnd()
+    {
+        isFade = true;
+
+        fadeImage.gameObject.SetActive(true);
+
+        Color c = fadeImage.color;
+        c.a = 0f;
+        fadeImage.color = c;
+
+        float timer = 0f;
+
+        while (timer < fadeTime)
+        {
+            timer += Time.deltaTime;
+
+            c.a = Mathf.Lerp(0f, 1f, timer / fadeTime);
+            fadeImage.color = c;
+
+            yield return null;
+        }
+
+        c.a = 1f;
+        fadeImage.color = c;
+
+        // ページ非表示
+        foreach (var p in current.pages)
+            p.pageImage.gameObject.SetActive(false);
+
+        if (current.kaiwaName == "Stage4_Clear")
+        {
+            endingManager.StartEnding();
+            yield break;
+        }
+
+        BGMManager.Instance.StopBGM();
+
+        OnDialogueFinished?.Invoke();
+        OnDialogueFinished = null;
+
+        isFade = false;
+    }*/
+
+
 
 }

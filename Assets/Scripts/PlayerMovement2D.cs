@@ -4,6 +4,11 @@ using System.Collections.Generic;
 
 public class PlayerMovement2D : MonoBehaviour
 {
+    public float limitTime = 120f;
+
+    public StageManager1 stageManager;
+    public float survivalTime; // 経過時間
+
     [Header("ゲームオーバー画像")]
     public GameObject gameOverImage;
 
@@ -36,6 +41,15 @@ public class PlayerMovement2D : MonoBehaviour
         if (gameOverImage != null)
             gameOverImage.SetActive(false);
 
+        // ★ StageManager を自動取得
+        stageManager = FindObjectOfType<StageManager1>();
+
+        // ★ カメラを自動取得して位置をリセット
+        Camera cam = Camera.main;
+        if (cam != null)
+        {
+            cam.transform.position = new Vector3(0f, 0f, -10f);
+        }
 
         // JoyCon取得
         if (useJoyCon)
@@ -46,7 +60,6 @@ public class PlayerMovement2D : MonoBehaviour
 
                 foreach (var joycon in joycons)
                 {
-                    // 左JoyCon
                     if (joycon.isLeft)
                     {
                         leftJoycon = joycon;
@@ -62,8 +75,17 @@ public class PlayerMovement2D : MonoBehaviour
     }
 
 
+
+
     void Update()
     {
+        survivalTime += Time.deltaTime;
+
+        if (survivalTime >= limitTime)
+        {
+            stageManager.PlayerSurvivedFullTime();
+        }
+
         //=========================
         // キーボード入力
         //=========================
@@ -122,14 +144,16 @@ public class PlayerMovement2D : MonoBehaviour
 
         if (hp == 0)
         {
-            Debug.Log("GameOver");
-
             if (gameOverImage != null)
                 gameOverImage.SetActive(true);
 
             enabled = false;
             rb.linearVelocity = Vector2.zero;
+
+            // ★追加：ステージ3・4専用の死亡分岐
+            stageManager.PlayerDiedInSurvivalStage(survivalTime);
         }
+
     }
 
 
@@ -142,4 +166,6 @@ public class PlayerMovement2D : MonoBehaviour
 
         UpdateHP();
     }
+
+
 }

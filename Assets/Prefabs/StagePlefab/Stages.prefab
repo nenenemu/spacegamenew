@@ -4182,6 +4182,14 @@ PrefabInstance:
       value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Opasent.baby1
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: Opasent.baby2
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Hepasent.baby1
       value: 30
       objectReference: {fileID: 0}
@@ -4232,7 +4240,7 @@ PrefabInstance:
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: 'baby2Sprites.Array.data[0]'
       value: 
-      objectReference: {fileID: -1189722151, guid: 25a8533b88542434d86fa14c52d4ab88, type: 3}
+      objectReference: {fileID: 1880236392, guid: fc1f77a8b471a1d43990e5b8ee9fe662, type: 3}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: 'baby2Sprites.Array.data[1]'
       value: 

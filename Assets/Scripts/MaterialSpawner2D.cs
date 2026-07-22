@@ -35,11 +35,15 @@ public class MaterialSpawner2D : MonoBehaviour
     {
         while (true)
         {
-            Spawn();
+            StageManager1 sm = FindFirstObjectByType<StageManager1>();
+
+            if (sm == null || sm.canSpawn)
+            {
+                Spawn();
+            }
 
             yield return new WaitForSeconds(currentInterval);
 
-            // ­‚µ‚¸‚ÂƒXƒ|[ƒ“‚ğ‘¬‚­‚·‚é
             currentInterval -= intervalDecrease;
 
             if (currentInterval < minInterval)

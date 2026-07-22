@@ -2,17 +2,10 @@ using UnityEngine;
 
 public class MaterialMove2D : MonoBehaviour
 {
-
-    [Header("æ“¾‰Â”\‚È‘fŞ")]
-    public bool[] canCollectList = new bool[8];
+    public Sprite[] sprites = new Sprite[8];
+    public int materialIndex;
 
     public float speed = 5f;
-
-    [Header("F‚ğ9ŒÂ“o˜^")]
-    public Color[] colors = new Color[8];
-
-    [HideInInspector]
-    public int materialIndex;
 
     Rigidbody2D rb;
     SpriteRenderer sr;
@@ -22,17 +15,11 @@ public class MaterialMove2D : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
 
-        // ƒ‰ƒ“ƒ_ƒ€‚È‘fŞ
-        materialIndex = Random.Range(0, 8);
+        materialIndex = Random.Range(0, sprites.Length);
         UpdateMaterial();
 
-        // ƒ‰ƒ“ƒ_ƒ€‚È•ûŒü
         Vector2 dir;
-
-        do
-        {
-            dir = Random.insideUnitCircle;
-        }
+        do { dir = Random.insideUnitCircle; }
         while (dir.magnitude < 0.2f);
 
         rb.linearVelocity = dir.normalized * speed;
@@ -45,22 +32,19 @@ public class MaterialMove2D : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (!col.gameObject.CompareTag("Wall"))
-            return;
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ã¯ä½•ã‚‚ã—ãªã„ï¼ˆHPå‡¦ç†ã¯ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å´ï¼‰
+        if (col.gameObject.CompareTag("Wall"))
+        {
+            materialIndex++;
+            if (materialIndex >= sprites.Length)
+                materialIndex = 0;
 
-        materialIndex++;
-
-        if (materialIndex >= 8)
-            materialIndex = 0;
-
-        UpdateMaterial();
+            UpdateMaterial();
+        }
     }
 
     void UpdateMaterial()
     {
-        if (colors.Length > materialIndex)
-            sr.color = colors[materialIndex];
-
-        Debug.Log("Œ»İ‚ÌmaterialIndex = " + materialIndex);
+        sr.sprite = sprites[materialIndex];
     }
 }

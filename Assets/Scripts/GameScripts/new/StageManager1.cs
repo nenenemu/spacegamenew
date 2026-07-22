@@ -7,37 +7,56 @@ using System.Collections;
 public class BabyMovieData
 {
     public string babyName;
-
-    [Header("0:低 1:中 2:高")]
-    public VideoClip[] movies = new VideoClip[3];
+    public VideoClip[] movies = new VideoClip[3]; // 0低 1中 2高
 }
 
 [System.Serializable]
 public class StageResultMovie
 {
     public string stageName;
-
-    [Header("1体目")]
     public BabyMovieData baby1;
-
-    [Header("2体目")]
     public BabyMovieData baby2;
+}
+
+[System.Serializable]
+public class StageMaterialRule
+{
+    public bool[] correct1st = new bool[8];   // ステージ1回目の正解素材
+    public bool[] correct2nd = new bool[8];   // ステージ2回目の正解素材
 }
 
 public class StageManager1 : MonoBehaviour
 {
-    public int stageNumber = 1;   // 現在のステージ番号
+    private bool stage3TutorialShown = false;
+    private bool stage4TutorialShown = false;
 
+    [Header("Stage Start Images")]
+    public Image tutorialImage;
+
+    public Sprite stage1Control;
+    public Sprite stage1Material;
+    public Sprite stage2Material;
+    public Sprite stage34Control;
+
+    public Image stageStartImage;
+    public float stageStartTime = 2f;
+    public float stageStartFade = 1f;
+
+    private bool showStart = true;
+
+    [HideInInspector]
+    public bool canSpawn = false;
+
+    public int stageNumber = 1;
 
     private bool isTimeOver = false;
+    private bool isResultRunning = false;
 
-    [Header("時間切れ")]
     public Image timeOverImage;
 
-
-    [Header("ステージごとの結果動画")]
     public StageResultMovie[] resultMovies;
 
+    public StageMaterialRule[] materialRules;   // ★ステージごとの正解素材セット
 
     public GameObject[] stagePrefabs;
     public Transform stageRoot;
@@ -45,37 +64,40 @@ public class StageManager1 : MonoBehaviour
 
     public GameObject currentStage;
 
-    // ゴール時の純度保存
     private int resultBaby1;
     private int resultBaby2;
 
+    private int stagePlayCount = 0;  // ★ステージ3・4を2回プレイするため
 
-    [Header("結果動画")]
     public VideoPlayer videoPlayer;
     public RawImage movieImage;
 
-    [Header("ゴール演出")]
     public GameObject goalImage;
-
-    public float goalDisplayTime = 2f;
-
-    [Header("ゴール時に消すUI")]
     public GameObject[] hideUIObjects;
 
-
-    [Header("暗転")]
-    public Image whiteFade;
     public Image blackFade;
-
     public float fadeTime = 1f;
 
-    // 最初の紙芝居が終わったらステージ1を生成する
+    // ★START画像
+    public Image startImage;
+
     void Start()
     {
-        if (timeOverImage != null)
+        if (tutorialImage != null)
         {
-            timeOverImage.gameObject.SetActive(false);
+            tutorialImage.gameObject.SetActive(false);
         }
+
+        if (stageStartImage != null)
+        {
+            Color c = stageStartImage.color;
+            c.a = 0f;
+            stageStartImage.color = c;
+            stageStartImage.gameObject.SetActive(false);
+        }
+
+        if (timeOverImage != null)
+            timeOverImage.gameObject.SetActive(false);
 
         if (blackFade != null)
         {
@@ -83,11 +105,24 @@ public class StageManager1 : MonoBehaviour
             c.a = 0;
             blackFade.color = c;
         }
+
+        if (startImage != null)
+        {
+            Color sc = startImage.color;
+            sc.a = 0;
+            startImage.color = sc;
+            startImage.gameObject.SetActive(false);
+        }
+
     }
 
     public void LoadStage(int index)
     {
-        stageNumber = index + 1;  // 1始まりにする
+        stageNumber = index + 1;
+
+        // ★追加
+        if (stageNumber == 3 || stageNumber == 4)
+            showStart = true;
 
         if (currentStage != null)
             Destroy(currentStage);
@@ -95,168 +130,167 @@ public class StageManager1 : MonoBehaviour
         currentStage = Instantiate(stagePrefabs[index], stageRoot);
     }
 
+    // ★素材正解判定（PlayerMovement2D から呼ばれる）
+    public bool IsCorrectMaterial(int materialIndex)
+    {
+        int stageIdx = stageNumber - 1;
 
-    // ★ プレイヤーから nextStage を受け取る
-    public void StageClear(
-    int nextStage,
-    int baby1,
-    int baby2
-)
+        if (stagePlayCount == 0)
+            return materialRules[stageIdx].correct1st[materialIndex];
+        else
+            return materialRules[stageIdx].correct2nd[materialIndex];
+    }
+
+    public void StageClear(int nextStage, int baby1, int baby2)
     {
         resultBaby1 = baby1;
         resultBaby2 = baby2;
 
-
         DestroyAllMaterials();
 
+        // ★ステージ3・4は2回プレイしてからリザルト
+        if (stageNumber == 3 || stageNumber == 4)
+        {
+            stagePlayCount++;
+
+            if (stagePlayCount < 2)
+            {
+                showStart = true;
+                StartCoroutine(StageTransitionEffect());
+                return;
+            }
+            else
+            {
+                stagePlayCount = 0;
+                showStart = false;   // ★2回目終了後はSTARTを出さない
+            }
+        }
 
         StartCoroutine(ResultSequence(nextStage));
     }
 
     private void DestroyAllMaterials()
     {
-        MaterialFall[] materials = FindObjectsByType<MaterialFall>(FindObjectsSortMode.None);
-
-        foreach (MaterialFall mat in materials)
-        {
-            Destroy(mat.gameObject);
-        }
+        MaterialMove2D[] mats = FindObjectsByType<MaterialMove2D>(FindObjectsSortMode.None);
+        foreach (var m in mats)
+            Destroy(m.gameObject);
     }
-
 
     int GetResult(int value)
     {
-        if (value < 34)
-            return 0;
-
-        if (value < 67)
-            return 1;
-
+        if (value < 34) return 0;
+        if (value < 67) return 1;
         return 2;
     }
 
+    // ★ステージ3・4の間の演出（巨大化なし）
+    IEnumerator StageTransitionEffect()
+    {
+        canSpawn = false;
+
+        // ゴール画像が出ていたら少し待ってから消す
+        if (goalImage != null && goalImage.activeSelf)
+        {
+            yield return new WaitForSeconds(2f);
+            goalImage.SetActive(false);
+        }
+        // 暗転
+        yield return StartCoroutine(Fade(blackFade, 0, 1));
+
+        // ★暗転したまま1秒待つ
+        yield return new WaitForSecondsRealtime(1f);
+
+        // 同じステージをもう一度ロード
+        LoadStage(stageNumber - 1);
+        DestroyStageMaterials();
+
+        // ★ロード後も暗転したまま0.5秒待つ
+        yield return new WaitForSecondsRealtime(0.5f);
+        // 明転
+        yield return StartCoroutine(Fade(blackFade, 1, 0));
+
+        // ゲームはまだ止める
+        canSpawn = false;
+
+        if (showStart)
+        {
+            stageStartImage.gameObject.SetActive(true);
+
+            Color c = stageStartImage.color;
+            c.a = 0f; // ← ここを追加（重要）
+            stageStartImage.color = c;
+
+            // ここからフェードイン
+            yield return new WaitForSecondsRealtime(stageStartTime);
+
+            float t = 0f;
+            while (t < stageStartFade)
+            {
+                t += Time.deltaTime;
+                c.a = Mathf.Lerp(1f, 0f, t / stageStartFade);
+                stageStartImage.color = c;
+                yield return null;
+            }
+
+            c.a = 0f;
+            stageStartImage.color = c;
+            stageStartImage.gameObject.SetActive(false);
+        }
+
+
+        // ここでゲーム開始
+        canSpawn = true;
+    }
+
+
     IEnumerator ResultSequence(int nextStage)
     {
-        //-------------------------
-        // ゴール表示
-        //-------------------------
+        if (isResultRunning)
+            yield break;
 
-
-
+        isResultRunning = true;
 
         if (!isTimeOver)
         {
             if (goalImage != null)
                 goalImage.SetActive(true);
 
-
             yield return new WaitForSecondsRealtime(2f);
         }
 
-
-        //-------------------------
-        // UI非表示
-        //-------------------------
-
         foreach (GameObject obj in hideUIObjects)
-        {
-            if (obj != null)
-            {
-                obj.SetActive(false);
-            }
-        }
+            if (obj != null) obj.SetActive(false);
 
-
-        //-------------------------
-        // 白暗転
-        //-------------------------
-
-        yield return StartCoroutine(
-            Fade(blackFade, 0, 1)
-        );
-
-
-        //-------------------------
-        // 完全白
-        //-------------------------
+        yield return StartCoroutine(Fade(blackFade, 0, 1));
 
         if (goalImage != null)
             goalImage.SetActive(false);
-
-
-
-        //-------------------------
-        // ステージ削除
-        //-------------------------
 
         if (currentStage != null)
             Destroy(currentStage);
 
 
 
-        //-------------------------
-        // 動画準備
-        //-------------------------
-
         movieImage.gameObject.SetActive(true);
-
 
         videoPlayer.clip =
             resultMovies[nextStage - 1].baby1.movies[
                 GetResult(resultBaby1)
             ];
 
-
         videoPlayer.Prepare();
-
-
         while (!videoPlayer.isPrepared)
             yield return null;
 
-
-
-        // 1フレームだけ読み込み
         videoPlayer.Play();
-
         yield return null;
-
         videoPlayer.Pause();
 
+        yield return StartCoroutine(Fade(blackFade, 1, 0));
 
-
-        //-------------------------
-        // 白解除
-        //-------------------------
-
-        yield return StartCoroutine(
-        Fade(blackFade, 1, 0)
-        );
-
-
-        //-------------------------
-        // 完全透明になった後
-        //-------------------------
-
-        Time.timeScale = 1f;
-
-
-        // 1フレーム待つ
-        yield return null;
-
-
-        // 完全透明後に再生
         videoPlayer.Play();
-
-
-
         while (videoPlayer.isPlaying)
             yield return null;
-
-
-
-        //-------------------------
-        // 2本目
-        //-------------------------
 
         yield return StartCoroutine(
             PlayMovie(
@@ -266,35 +300,26 @@ public class StageManager1 : MonoBehaviour
             )
         );
 
-
         movieImage.gameObject.SetActive(false);
-
 
         kaiwa.SetFinishEvent(() =>
         {
-            BGMManager.Instance.PlayGame();
-            LoadStage(nextStage);
+            StartCoroutine(BeginStage(nextStage));
+            isResultRunning = false;
         });
 
-
-        kaiwa.StartKaiwa(
-            "Stage" + nextStage + "_Clear"
-        );
+        kaiwa.StartKaiwa("Stage" + nextStage + "_Clear");
     }
 
     IEnumerator PlayMovie(VideoClip clip)
     {
         videoPlayer.clip = clip;
-
         videoPlayer.Prepare();
-
 
         while (!videoPlayer.isPrepared)
             yield return null;
 
-
         videoPlayer.Play();
-
 
         while (videoPlayer.isPlaying)
             yield return null;
@@ -304,89 +329,217 @@ public class StageManager1 : MonoBehaviour
     {
         img.gameObject.SetActive(true);
 
-
         Color c = img.color;
-
         float t = 0;
-
 
         while (t < fadeTime)
         {
             t += Time.unscaledDeltaTime;
-
-
-            c.a = Mathf.Lerp(
-                start,
-                end,
-                t / fadeTime
-            );
-
-
+            c.a = Mathf.Lerp(start, end, t / fadeTime);
             img.color = c;
-
-
             yield return null;
         }
-
 
         c.a = end;
         img.color = c;
     }
 
-    public void TimeOver()
+    // ★120秒生存 → 低純度扱い
+    public void PlayerSurvivedFullTime()
     {
-        resultBaby1 = 100;
-        resultBaby2 = 100;
+        resultBaby1 = 0;
+        resultBaby2 = 0;
 
-        StartCoroutine(TimeOverSequence());
+        StageClear(stageNumber, resultBaby1, resultBaby2);
     }
 
-    IEnumerator TimeOverSequence()
+    // ★死亡時の時間分岐
+    public void PlayerDiedInSurvivalStage(float time)
     {
-        Time.timeScale = 0f;
-
-
-        // 制限時間切れ画像表示
-        if (timeOverImage != null)
-            timeOverImage.gameObject.SetActive(true);
-
-
-        yield return new WaitForSecondsRealtime(2f);
-
-
-        // UIを消す
-        foreach (GameObject obj in hideUIObjects)
+        if (time < 30f)
         {
-            if (obj != null)
+            resultBaby1 = 100;
+            resultBaby2 = 100;
+        }
+        else if (time < 90f)
+        {
+            resultBaby1 = 50;
+            resultBaby2 = 50;
+        }
+        else
+        {
+            resultBaby1 = 0;
+            resultBaby2 = 0;
+        }
+
+        StageClear(stageNumber, resultBaby1, resultBaby2);
+    }
+
+    void DestroyStageMaterials()
+    {
+        string[] tags =
+        {
+        "Si",
+        "C",
+        "He",
+        "H",
+        "Mg",
+        "N",
+        "Fe",
+        "Ni",
+        "O"
+    };
+
+        foreach (string tag in tags)
+        {
+            GameObject[] objs = GameObject.FindGameObjectsWithTag(tag);
+
+            foreach (GameObject obj in objs)
+                Destroy(obj);
+        }
+    }
+
+    IEnumerator StageStartEffect()
+    {
+        canSpawn = false;
+
+        // 白画像を表示
+        stageStartImage.gameObject.SetActive(true);
+
+        Color c = stageStartImage.color;
+        c.a = 1f;
+        stageStartImage.color = c;
+
+        // 白→透明
+        float t = 0f;
+        while (t < stageStartFade)
+        {
+            t += Time.deltaTime;
+            c.a = Mathf.Lerp(1f, 0f, t / stageStartFade);
+            stageStartImage.color = c;
+            yield return null;
+        }
+
+        stageStartImage.gameObject.SetActive(false);
+
+        // START画像
+        startImage.gameObject.SetActive(true);
+
+        Color sc = startImage.color;
+        sc.a = 1f;
+        startImage.color = sc;
+
+        yield return new WaitForSecondsRealtime(stageStartTime);
+
+        t = 0f;
+        while (t < stageStartFade)
+        {
+            t += Time.deltaTime;
+            sc.a = Mathf.Lerp(1f, 0f, t / stageStartFade);
+            startImage.color = sc;
+            yield return null;
+        }
+
+        startImage.gameObject.SetActive(false);
+
+        canSpawn = true;
+    }
+
+    public IEnumerator BeginStage(int nextStage)
+    {
+        canSpawn = false;
+
+        // 前のステージを消す
+        if (currentStage != null)
+        {
+            Destroy(currentStage);
+            currentStage = null;
+        }
+
+        // 残っている素材も全部消す
+        DestroyStageMaterials();
+
+        yield return null;
+
+        LoadStage(nextStage);
+
+        yield return StartCoroutine(Fade(blackFade, 1, 0));
+
+        // ステージ1
+        if (nextStage == 0)
+        {
+            yield return StartCoroutine(
+                ShowTutorial(
+                    stage1Control,
+                    stage1Material
+                ));
+        }
+        // ステージ2
+        else if (nextStage == 1)
+        {
+            yield return StartCoroutine(
+                ShowTutorial(
+                    stage2Material
+                ));
+        }
+        // ステージ3だけ説明を出す
+        else if (nextStage == 2)
+        {
+            if (!stage3TutorialShown)
             {
-                obj.SetActive(false);
+                stage3TutorialShown = true;
+
+                yield return StartCoroutine(
+                    ShowTutorial(
+                        stage34Control
+                    ));
             }
         }
 
-
-        // 時間切れ画像を消す
-        if (timeOverImage != null)
-            timeOverImage.gameObject.SetActive(false);
-
-
-        // ★追加
-        // ステージ内に残っている素材削除
-        DestroyAllMaterials();
-
-
-        // 純度100扱い
-        resultBaby1 = 100;
-        resultBaby2 = 100;
-
-
-        isTimeOver = true;
-
-
-        yield return StartCoroutine(
-            ResultSequence(1)
-        );
+        canSpawn = true;
     }
 
 
+    IEnumerator ShowTutorial(params Sprite[] sprites)
+    {
+        canSpawn = false;
 
+        JoyconManager jm = JoyconManager.Instance;
+
+        tutorialImage.gameObject.SetActive(true);
+
+        foreach (Sprite s in sprites)
+        {
+            tutorialImage.sprite = s;
+
+            while (true)
+            {
+                bool next = Input.GetKeyDown(KeyCode.Return);
+
+                if (!next && jm != null && jm.j != null)
+                {
+                    foreach (var jc in jm.j)
+                    {
+                        if (jc == null) continue;
+
+                        if (!jc.isLeft &&
+                            jc.GetButtonDown(Joycon.Button.DPAD_RIGHT))
+                        {
+                            next = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (next)
+                    break;
+
+                yield return null;
+            }
+        }
+
+        tutorialImage.gameObject.SetActive(false);
+
+        canSpawn = true;
+    }
 }

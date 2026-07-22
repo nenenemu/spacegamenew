@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 163451367254518520}
   m_Layer: 6
   m_Name: Materials
-  m_TagString: Untagged
+  m_TagString: sozai
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.2, y: 2.2, z: 1}
+  m_LocalScale: {x: 0.3708159, y: 0.3708159, z: 0.33710536}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -82,9 +82,9 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 60
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: -256217880, guid: 5ce6e20ae4b2832429f5b30a31f6f27f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -129,7 +129,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Radius: 2
 --- !u!50 &5243685008858643485
 Rigidbody2D:
   serializedVersion: 5
@@ -144,7 +144,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -156,7 +156,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &163451367254518520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,15 +169,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0e15130a1e3b474d821be81590b4cda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MaterialMove
-  canCollectList: 0100000100000001
-  speed: 3
-  colors:
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 0, g: 0, b: 1, a: 1}
-  - {r: 0, g: 1, b: 0, a: 1}
-  - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 0, g: 0, b: 0, a: 1}
-  - {r: 1, g: 0.9493562, b: 0, a: 1}
-  - {r: 1, g: 0, b: 1, a: 1}
-  - {r: 0, g: 1, b: 1, a: 1}
+  sprites:
+  - {fileID: -256217880, guid: 5ce6e20ae4b2832429f5b30a31f6f27f, type: 3}
+  - {fileID: -2090928459, guid: 5ce6e20ae4b2832429f5b30a31f6f27f, type: 3}
+  - {fileID: -1244673715, guid: 5ce6e20ae4b2832429f5b30a31f6f27f, type: 3}
+  - {fileID: 1885383514, guid: 5ce6e20ae4b2832429f5b30a31f6f27f, type: 3}
+  - {fileID: -1310702288, guid: 5ce6e20ae4b2832429f5b30a31f6f27f, type: 3}
+  - {fileID: -1139177725, guid: 5ce6e20ae4b2832429f5b30a31f6f27f, type: 3}
+  - {fileID: -245230666, guid: 5ce6e20ae4b2832429f5b30a31f6f27f, type: 3}
+  - {fileID: -1652351634, guid: 5ce6e20ae4b2832429f5b30a31f6f27f, type: 3}
+  - {fileID: -1237542822, guid: 5ce6e20ae4b2832429f5b30a31f6f27f, type: 3}
   materialIndex: 0
+  speed: 1.6

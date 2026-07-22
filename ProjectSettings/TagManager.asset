@@ -22,6 +22,7 @@ TagManager:
   - inseki
   - Wall
   - Meteor
+  - sozai
   layers:
   - Default
   - TransparentFX
