@@ -4595,75 +4595,87 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Cpasent.baby1
-      value: 30
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Cpasent.baby2
-      value: 30
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Hpasent.baby1
-      value: 30
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Hpasent.baby2
-      value: 30
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Npasent.baby1
-      value: 30
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Npasent.baby2
-      value: 30
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Opasent.baby1
-      value: -20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Opasent.baby2
-      value: -20
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: middleColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: middleColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: middleColor.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Fepasent.baby1
-      value: -20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Fepasent.baby2
-      value: -20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Hepasent.baby1
-      value: 30
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Hepasent.baby2
-      value: 30
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Mgpasent.baby1
-      value: 30
+      value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Mgpasent.baby2
-      value: -20
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Nipasent.baby1
-      value: 30
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Nipasent.baby2
-      value: 30
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Sipasent.baby1
-      value: -20
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: Sipasent.baby2
-      value: 30
+      value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: baby1Sprites.Array.size

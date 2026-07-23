@@ -10,6 +10,19 @@ public class MaterialValue
 
 public class PlayerMovement : MonoBehaviour
 {
+
+    [Header("純度減少")]
+    public float jundoDecreaseTime = 5f; //何秒ごとに減るか
+    public int jundoDecreaseValue = 1;   //減る量
+
+    private float jundoTimer = 0f;
+
+
+    [Header("ゲージ色")]
+    public Color highColor = Color.green; //60以上
+    public Color lowColor = Color.red;    //30以下
+    public Color middleColor = Color.yellow; //それ以外
+
     private float cameraY;
 
     [Header("プレイヤー画面下制限")]
@@ -70,9 +83,9 @@ public class PlayerMovement : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
 
-    [Header("サブ時自動増加")]
+    /*[Header("サブ時自動増加")]
     public float subAddTime = 3f; //何秒ごとに増えるか
-    public int subAddValue = 1;   //増える量
+    public int subAddValue = 1;   //増える量*/
 
     private float subTimer = 0f;
 
@@ -351,7 +364,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
 
-        AutoAddSubBaby();
+        //AutoAddSubBaby();
+
+        DecreaseJundo();
 
         UpdateDirection();
 
@@ -509,6 +524,9 @@ public class PlayerMovement : MonoBehaviour
             Baby2(gage);
             Baby1(gage2);
         }
+
+
+        UpdateGaugeColor();
     }
 
     void Baby1(Image img)
@@ -681,7 +699,7 @@ public class PlayerMovement : MonoBehaviour
             );
     }
 
-    void AutoAddSubBaby()
+    /*void AutoAddSubBaby()
     {
         // ゴール・時間切れ後は増加停止
         if (gameEnd)
@@ -712,7 +730,7 @@ public class PlayerMovement : MonoBehaviour
 
             UpdateGauge();
         }
-    }
+    }*/
 
     void UpdateDirection()
     {
@@ -850,5 +868,57 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+
+    void DecreaseJundo()
+    {
+        if (gameEnd)
+            return;
+
+
+        jundoTimer += Time.deltaTime;
+
+
+        if (jundoTimer >= jundoDecreaseTime)
+        {
+            jundoTimer = 0;
+
+
+            baby1jundo -= jundoDecreaseValue;
+            baby2jundo -= jundoDecreaseValue;
+
+
+            baby1jundo = Mathf.Clamp(baby1jundo, 0, 100);
+            baby2jundo = Mathf.Clamp(baby2jundo, 0, 100);
+
+
+            UpdateGauge();
+        }
+    }
+
+    void UpdateGaugeColor()
+    {
+        if (gage != null)
+            gage.color = GetGaugeColor(
+                baby1Select ? baby1jundo : baby2jundo
+            );
+
+
+        if (gage2 != null)
+            gage2.color = GetGaugeColor(
+                baby1Select ? baby2jundo : baby1jundo
+            );
+    }
+
+
+    Color GetGaugeColor(int value)
+    {
+        if (value >= 60)
+            return highColor;
+
+        if (value <= 30)
+            return lowColor;
+
+        return middleColor;
+    }
 
 }

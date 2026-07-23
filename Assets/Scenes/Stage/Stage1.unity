@@ -9608,28 +9608,28 @@ MonoBehaviour:
     baby1:
       babyName: "\u6C34\u661F"
       movies:
-      - {fileID: 32900000, guid: a1399b393dc5f6c448ce243a56580f21, type: 3}
-      - {fileID: 32900000, guid: 67f90fdd717467e4baf215f2dc3e8ba3, type: 3}
       - {fileID: 32900000, guid: 8db74f7966b1e3743b78ecc3363688c7, type: 3}
+      - {fileID: 32900000, guid: 67f90fdd717467e4baf215f2dc3e8ba3, type: 3}
+      - {fileID: 32900000, guid: a1399b393dc5f6c448ce243a56580f21, type: 3}
     baby2:
       babyName: "\u91D1\u661F"
       movies:
-      - {fileID: 32900000, guid: c37d2be7436122846b57f8e0cd288f11, type: 3}
-      - {fileID: 32900000, guid: b55395a68bc1e8a4796210fc9effe262, type: 3}
       - {fileID: 32900000, guid: 7709bb97b21dcb5469a86887d7d31db5, type: 3}
+      - {fileID: 32900000, guid: b55395a68bc1e8a4796210fc9effe262, type: 3}
+      - {fileID: 32900000, guid: c37d2be7436122846b57f8e0cd288f11, type: 3}
   - stageName: Stage2
     baby1:
       babyName: "\u5730\u7403"
       movies:
-      - {fileID: 32900000, guid: 19ad12db0a8da8a428d2101dfbf0bba9, type: 3}
-      - {fileID: 32900000, guid: 5aba343d59e641c45a974b6e90fb13ee, type: 3}
       - {fileID: 32900000, guid: 0c462c42dd16f104d87677da4e9379a9, type: 3}
+      - {fileID: 32900000, guid: 5aba343d59e641c45a974b6e90fb13ee, type: 3}
+      - {fileID: 32900000, guid: 19ad12db0a8da8a428d2101dfbf0bba9, type: 3}
     baby2:
       babyName: "\u706B\u661F"
       movies:
-      - {fileID: 32900000, guid: 3b0bd9096c1e8444e8d893a0c207cef7, type: 3}
-      - {fileID: 32900000, guid: 6b9f7a9ecce55f84794347448d95a5a8, type: 3}
       - {fileID: 32900000, guid: bc97d5aab2a49a2479cc7d60e287e372, type: 3}
+      - {fileID: 32900000, guid: 6b9f7a9ecce55f84794347448d95a5a8, type: 3}
+      - {fileID: 32900000, guid: 3b0bd9096c1e8444e8d893a0c207cef7, type: 3}
   - stageName: Stage3
     baby1:
       babyName: "\u6728\u661F"
