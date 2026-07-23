@@ -627,14 +627,24 @@ public class StageManager1 : MonoBehaviour
 
         canPlayerMove = true;
 
+        // ステージ1・2用BGM
+        if (nextStage == 0 || nextStage == 1)
+        {
+            BGMManager.Instance.Game12BGM();
+        }
+
+        // ステージ3・4用BGM
+        else if (nextStage == 2 || nextStage == 3)
+        {
+            BGMManager.Instance.Game34BGM();
+        }
+
+
         if (player != null)
             player.enabled = true;
-
         if (player2D != null)
             player2D.enabled = true;
 
-        // プレイヤーが動けるようになったあと
-        
         canSpawn = true;
     }
 

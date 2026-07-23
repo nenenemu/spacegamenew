@@ -3,6 +3,9 @@ using System.Collections;
 
 public class BGMManager : MonoBehaviour
 {
+    [Header("タップ音")]
+    public AudioClip tapSE;
+
     public static BGMManager Instance;
 
     [Header("AudioSource")]
@@ -12,14 +15,22 @@ public class BGMManager : MonoBehaviour
     [Header("BGM")]
     public AudioClip taikiBGM;
     public AudioClip titleBGM;
+    public AudioClip firstkaiwaBGM;
     public AudioClip kamishibaiBGM;
-    public AudioClip kaiwaBGM;
-    public AudioClip gameBGM;
+    public AudioClip tuujoukaiwaBGM;
+
+    public AudioClip stage12BGM;
+    public AudioClip stage34BGM;
+
+
+    //public AudioClip gameBGM;
     public AudioClip endingBGM;
 
     [Header("動画SE")]
     public AudioClip movieSE1;
     public AudioClip movieSE2;
+    public AudioClip movieSE3;
+
 
     void Awake()
     {
@@ -38,6 +49,8 @@ public class BGMManager : MonoBehaviour
     // BGM
     //================================================
 
+    
+
     public void PlayTaiki()
     {
         PlayBGM(taikiBGM);
@@ -48,20 +61,34 @@ public class BGMManager : MonoBehaviour
         PlayBGM(titleBGM);
     }
 
-    public void PlayKamishibai()
+    public void PlayKamishibai()//紙芝居威容BGｍ
     {
         PlayBGM(kamishibaiBGM);
     }
 
-    public void PlayKaiwa()
+    public void Firstkaiwa()//最初の会話のやつ
     {
-        PlayBGM(kaiwaBGM);
+        PlayBGM(firstkaiwaBGM);
     }
 
-    public void PlayGame()
+
+    public void Tuujoukaiwa()//通常会話
     {
-        PlayBGM(gameBGM);
+        PlayBGM(tuujoukaiwaBGM);
     }
+
+    public void Game12BGM()//ステージ12ようのBGM
+    {
+        PlayBGM(stage12BGM);
+    }
+
+    public void Game34BGM()//ステージ34用のBGM
+    {
+
+        PlayBGM(stage34BGM);
+    }
+
+
 
     public void PlayEnding()
     {
@@ -96,10 +123,24 @@ public class BGMManager : MonoBehaviour
     // 動画SEを時間指定で鳴らす
     //================================================
 
-    public void PlayMovieSE(float time1, float time2)
+    public void PlayMovieSE(float time1, float time2, float time3)
     {
-        StartCoroutine(MovieSE(time1, time2));
+        StartCoroutine(MovieSE(time1, time2, time3));
     }
+
+    IEnumerator MovieSE(float time1, float time2, float time3)
+    {
+        yield return new WaitForSeconds(time1);
+        PlayMovieSE1();
+
+        yield return new WaitForSeconds(time2 - time1);
+        PlayMovieSE2();
+
+        yield return new WaitForSeconds(time3 - time2);
+        seSource.PlayOneShot(movieSE3);
+    }
+
+
 
     IEnumerator MovieSE(float time1, float time2)
     {
@@ -147,5 +188,13 @@ public class BGMManager : MonoBehaviour
         yield return new WaitForSeconds(3f); // 好きな秒数
 
         PlayMovieSE2();
+    }
+
+    public void PlayTapSE()
+    {
+        if (tapSE != null)
+        {
+            seSource.PlayOneShot(tapSE);
+        }
     }
 }

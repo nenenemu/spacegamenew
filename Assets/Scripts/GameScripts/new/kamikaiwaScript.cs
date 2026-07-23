@@ -27,6 +27,8 @@ public class KaiwaData
 
 public class kamikaiwaScript : MonoBehaviour
 {
+    private bool firstKaiwaPlayed = false;
+
     private JoyconManager jm;
 
     private float inputCooldown = 0.2f;
@@ -164,7 +166,17 @@ public class kamikaiwaScript : MonoBehaviour
 
     public void StartKaiwa(string name)
     {
-        BGMManager.Instance.PlayKaiwa();
+        // Å‰‚Ì‰ï˜b‚¾‚¯ê—pBGM
+        if (!firstKaiwaPlayed)
+        {
+            firstKaiwaPlayed = true;
+            BGMManager.Instance.Firstkaiwa();
+        }
+        else
+        {
+            BGMManager.Instance.Tuujoukaiwa();
+        }
+
 
         current = null;
 

@@ -5,6 +5,12 @@ using UnityEngine.Video;
 
 public class Test : MonoBehaviour
 {
+    private bool movieStarting = false;
+
+    private bool movieSEPlayed = false;
+
+    private static bool started = false;
+
     private bool inmovie = false;
 
     [Header("動画")]
@@ -96,7 +102,18 @@ public class Test : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (started)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        started = true;
+
+        Debug.Log("tootta");
+
         BGMManager.Instance.PlayTaiki();
+
 
         Color fc = fadeImage.color;
         fc.a = 0;
@@ -121,7 +138,6 @@ public class Test : MonoBehaviour
 
         sceneFade = SceneFadeManager.Instance;
 
-        // シーン移動用の黒を透明化
         StartCoroutine(StartSceneFade());
     }
 
@@ -167,9 +183,10 @@ public class Test : MonoBehaviour
                 }
 
 
-                if (sceneFadeEnd && inbuttom)
+                if (sceneFadeEnd && inbuttom && !movieStarting)
                 {
                     inbuttom = false;
+                    movieStarting = true;
                     StartCoroutine(FadeInToMovie());
                 }
 
@@ -396,7 +413,7 @@ public class Test : MonoBehaviour
 
         stageManager.kaiwa.SetFinishEvent(() =>
         {
-            BGMManager.Instance.PlayGame();
+            //BGMManager.Instance.PlayGame();
 
             StartCoroutine(stageManager.BeginStage(0));
         });
@@ -527,7 +544,7 @@ public class Test : MonoBehaviour
 
     IEnumerator FadeInToMovie()
     {
-        BGMManager.Instance.StartOpeningMovie();
+        //BGMManager.Instance.StartOpeningMovie();//これが動画に合わせてSEならすとこ
 
         // 黒フェードを有効化
         fadeImage.gameObject.SetActive(true);
@@ -557,6 +574,13 @@ public class Test : MonoBehaviour
 
         // ⑤ 黒が完全に透明になったら動画再生
         videoPlayer.Play();
+
+        if (!movieSEPlayed)
+        {
+            movieSEPlayed = true;
+            BGMManager.Instance.PlayMovieSE(1.05f, 3.37f, 3.5f);
+        }
+        Debug.Log("tootta");
     }
 
 

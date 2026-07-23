@@ -11922,14 +11922,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BGMManager
   bgmSource: {fileID: 1790513788}
   seSource: {fileID: 1790513787}
-  taikiBGM: {fileID: 8300000, guid: 0778b4d62ba2edf4e8ecc7418f60a900, type: 3}
-  titleBGM: {fileID: 8300000, guid: 9c5f7e60e0c6c5b44a4e0b6a0bfe1e10, type: 3}
-  kamishibaiBGM: {fileID: 8300000, guid: 0778b4d62ba2edf4e8ecc7418f60a900, type: 3}
-  kaiwaBGM: {fileID: 8300000, guid: 9c5f7e60e0c6c5b44a4e0b6a0bfe1e10, type: 3}
-  gameBGM: {fileID: 8300000, guid: 0778b4d62ba2edf4e8ecc7418f60a900, type: 3}
-  endingBGM: {fileID: 8300000, guid: 0778b4d62ba2edf4e8ecc7418f60a900, type: 3}
-  movieSE1: {fileID: 0}
-  movieSE2: {fileID: 0}
+  taikiBGM: {fileID: 0}
+  titleBGM: {fileID: 8300000, guid: 1e3bcc7e0539dc6498b954c3037f2fc6, type: 3}
+  firstkaiwaBGM: {fileID: 8300000, guid: 67ae91416264d8442a622ca43ee2d3f6, type: 3}
+  kamishibaiBGM: {fileID: 8300000, guid: fbc85ff53303b2148a64a13e0b73fa71, type: 3}
+  tuujoukaiwaBGM: {fileID: 8300000, guid: 59c1e713f95a89b4b980c865c6a36f61, type: 3}
+  stage12BGM: {fileID: 8300000, guid: 4823f1bdece2c45468d91fdcce0bd2ac, type: 3}
+  stage34BGM: {fileID: 8300000, guid: 2e9e3e4a9f42c924fa4d10667b4db243, type: 3}
+  endingBGM: {fileID: 8300000, guid: 154fcd4702e75bd47882185a62a83f5b, type: 3}
+  movieSE1: {fileID: 8300000, guid: 4c772486e00ee7a448bb9312c47286b2, type: 3}
+  movieSE2: {fileID: 8300000, guid: 8ebea5ec6e9a6384daae2528dc133aa0, type: 3}
+  movieSE3: {fileID: 8300000, guid: 1c4caa2a16f12a24abe7aa45fc54e818, type: 3}
 --- !u!82 &1790513787
 AudioSource:
   m_ObjectHideFlags: 0

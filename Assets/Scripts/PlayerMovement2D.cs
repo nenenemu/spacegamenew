@@ -6,6 +6,7 @@ public class PlayerMovement2D : MonoBehaviour
 {
 
 
+
     public float limitTime = 90f;
 
     public StageManager1 stageManager;
@@ -104,6 +105,7 @@ public class PlayerMovement2D : MonoBehaviour
         input.x = Input.GetAxisRaw("Horizontal");
         input.y = Input.GetAxisRaw("Vertical");
 
+
         //=========================
         // JoyCon“ü—Í
         //=========================
@@ -112,10 +114,10 @@ public class PlayerMovement2D : MonoBehaviour
         {
             float[] stick = leftJoycon.GetStick();
 
-            Vector2 joyInput = new Vector2(stick[0], stick[1]);
-
-            if (joyInput.magnitude > 0.15f)
-                input = joyInput;
+            input = new Vector2(
+                stick[0],
+                stick[1]
+            );
         }
 
         input = input.normalized;

@@ -4678,6 +4678,10 @@ PrefabInstance:
       value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
+      propertyPath: jundoDecreaseTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840226999184963775, guid: 9f2f46fe4fdb41f468c8847e4786c049, type: 3}
       propertyPath: baby1Sprites.Array.size
       value: 4
       objectReference: {fileID: 0}
