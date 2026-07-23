@@ -1688,13 +1688,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MaterialSpawner
   materials:
-  - {fileID: 5769248582946593077, guid: f1d922f8529774a409e295f3dec3818a, type: 3}
   - {fileID: 7373421298471778127, guid: ba12f50903672264a88b64d17bc45603, type: 3}
-  - {fileID: 640514375321361930, guid: fa91690e366f8a64eaeec8abf6c9d7c0, type: 3}
-  - {fileID: 2842607081227310903, guid: ddd21824323444f4fbf79fd322076a88, type: 3}
   - {fileID: 6801249021072386432, guid: ef403cff1cfa18c4e81e9063037c1817, type: 3}
-  - {fileID: 6777464219589725599, guid: 29e128ba76f55e34ab8511bbd6368488, type: 3}
-  - {fileID: 775482577050143154, guid: 9b874e1d4fc2a3b4e94244d945ebfd1d, type: 3}
   - {fileID: 7494496648105854351, guid: b1313de64daab71499c7fd668ba8ce43, type: 3}
   - {fileID: 3250784394952974810, guid: e4319abbb43632945aa2e74bd1269d38, type: 3}
   spawnParent: {fileID: 1347787242678540555}
