@@ -9575,6 +9575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abc044a82075ecb478f8bc66ceb5374b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StageManager1
+  mainCamera: {fileID: 371401105}
   resultImageSets:
   - images:
     - {fileID: -1554520487, guid: dd44f2da3a2246c4ca347382a43d2f97, type: 3}

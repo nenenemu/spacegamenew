@@ -10,6 +10,11 @@ public class MaterialValue
 
 public class PlayerMovement : MonoBehaviour
 {
+    private float cameraY;
+
+    [Header("プレイヤー画面下制限")]
+    public float bottomMargin = 1f;
+
     private float originalThrustPower;
 
 
@@ -139,6 +144,8 @@ public class PlayerMovement : MonoBehaviour
     //----------------------------------------------------
     void Start()
     {
+        
+
         originalThrustPower = thrustPower;
 
 
@@ -224,8 +231,10 @@ public class PlayerMovement : MonoBehaviour
         if (stageManager == null)
             stageManager = FindObjectOfType<StageManager1>();
 
-        if (mainCamera == null)
-            mainCamera = FindObjectOfType<Camera>();
+        if (mainCamera != null)
+        {
+            cameraY = mainCamera.transform.position.y;
+        }
 
         jm = JoyconManager.Instance;
 
@@ -458,6 +467,31 @@ public class PlayerMovement : MonoBehaviour
                 ForceMode2D.Force);
         }
 
+
+        // カメラ下端より下に行けないようにする
+        if (mainCamera != null)
+        {
+            float cameraBottom =
+                mainCamera.transform.position.y -
+                mainCamera.orthographicSize;
+
+            Vector3 pos = transform.position;
+
+            if (pos.y < cameraBottom + bottomMargin)
+            {
+                pos.y = cameraBottom + bottomMargin;
+                transform.position = pos;
+
+                // 下方向の速度だけ消す
+                if (rb.linearVelocity.y < 0)
+                {
+                    rb.linearVelocity = new Vector2(
+                        rb.linearVelocity.x,
+                        0
+                    );
+                }
+            }
+        }
     }
 
     //----------------------------------------------------
@@ -627,11 +661,24 @@ public class PlayerMovement : MonoBehaviour
         if (mainCamera == null)
             return;
 
-        mainCamera.transform.position = new Vector3(
-            0f,
-            Mathf.Clamp(transform.position.y, minY, maxY),
-            -10f
-        );
+
+        // プレイヤーが今のカメラより上に行った時だけ追従
+        if (transform.position.y > cameraY)
+        {
+            cameraY = transform.position.y;
+        }
+
+
+        // 下には戻らない
+        cameraY = Mathf.Clamp(cameraY, minY, maxY);
+
+
+        mainCamera.transform.position =
+            new Vector3(
+                0f,
+                cameraY,
+                -10f
+            );
     }
 
     void AutoAddSubBaby()
@@ -788,7 +835,20 @@ public class PlayerMovement : MonoBehaviour
             needImg3.sprite = needSprite3_baby2[stage];
         }
     }
+    public void ResetCamera()
+    {
+        cameraY = transform.position.y;
 
+        if (mainCamera != null)
+        {
+            mainCamera.transform.position =
+                new Vector3(
+                    0f,
+                    cameraY,
+                    -10f
+                );
+        }
+    }
 
 
 }

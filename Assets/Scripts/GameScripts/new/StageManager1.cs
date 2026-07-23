@@ -38,7 +38,8 @@ public class StageMaterialRule
 
 public class StageManager1 : MonoBehaviour
 {
-
+    [Header("カメラ")]
+    public Camera mainCamera;
 
     public ResultImageSet[] resultImageSets;   // ★ステージごとに2枚ずつ入れる
    
@@ -540,6 +541,13 @@ public class StageManager1 : MonoBehaviour
             player = FindFirstObjectByType<PlayerMovement>();
             player2D = FindFirstObjectByType<PlayerMovement2D>();
             yield return null;
+        }
+
+        // Playerにカメラを渡す
+        if (player != null)
+        {
+            player.mainCamera = mainCamera;
+            player.ResetCamera();
         }
 
         Debug.Log("Player = " + player);
