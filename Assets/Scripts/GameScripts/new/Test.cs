@@ -15,28 +15,28 @@ public class Test : MonoBehaviour
 
     private bool inmovie = false;
 
-    [Header("動画")]
+    [Header("Move")]
     public VideoClip openingMovie;
     public VideoClip endingMovie;
 
     private SceneFadeManager sceneFade;
 
-    [Header("シーン移動用フェード")]
+    [Header("SceneidouyouFade")]
     public Image sceneFadeImage;
     public float sceneFadeTime = 1f;
 
     private bool sceneFadeEnd = false;
 
-    [Header("フェード用")]
+    [Header("FadeyouImage")]
     public Image fadeImage;
     public float fadeTime = 1.0f;
 
-    [Header("紙芝居用暗転")]
+    [Header("kamisibaiyouFade")]
     public Image sibaiFadeImage;
     public float sibaiFadeTime = 1.0f;
 
 
-    [Header("タイトル選択UI")]
+    [Header("TitleSlectUI")]
     public Button startButton;
     public Button optionsButton;
 
@@ -46,10 +46,10 @@ public class Test : MonoBehaviour
 
     public StageManager1 stageManager;
 
-    [Header("紙芝居終了後")]
+    [Header("kamisibaiFinished")]
     public float kaiwaWaitTime = 2.0f;
 
-    [Header("紙芝居設定")]
+    [Header("kamisibaiSetting")]
     public float slidespeed = 1.0f;
     public float slideDistance = 1000f;
 
@@ -73,7 +73,7 @@ public class Test : MonoBehaviour
     public RawImage titleImage;
 
 
-    [Header("紙芝居")]
+    [Header("kamisibai")]
     public UnityEngine.UI.Image[] sibai;
 
 
@@ -682,7 +682,7 @@ public class Test : MonoBehaviour
     {
         if (sceneFade == null)
         {
-            Debug.LogError("SceneFadeManagerがありません");
+            Debug.LogError("SceneFadeManagerNoFind");
             yield break;
         }
 

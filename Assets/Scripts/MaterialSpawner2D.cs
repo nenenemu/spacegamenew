@@ -8,12 +8,12 @@ public class MaterialSpawner2D : MonoBehaviour
 
     public GameObject materialPrefab;
 
-    [Header("ƒXƒ|[ƒ“ŠÔŠu")]
+    [Header("SpawnTime")]
     public float startInterval = 2f;      // Å‰
     public float minInterval = 0.3f;      // Å‘¬
     public float intervalDecrease = 0.05f;// 1‰ñ‚²‚Æ‚ÉŒ¸‚é
 
-    [Header("¶¬”ÍˆÍ")]
+    [Header("seiseihani")]
     public float range = 8f;
 
     private float currentInterval;

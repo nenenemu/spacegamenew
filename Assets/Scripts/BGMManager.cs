@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BGMManager : MonoBehaviour
 {
-    [Header("ƒ^ƒbƒv‰¹")]
+    [Header("topSE")]
     public AudioClip tapSE;
 
     public static BGMManager Instance;
@@ -26,7 +26,7 @@ public class BGMManager : MonoBehaviour
     //public AudioClip gameBGM;
     public AudioClip endingBGM;
 
-    [Header("“®‰æSE")]
+    [Header("MoveSE")]
     public AudioClip movieSE1;
     public AudioClip movieSE2;
     public AudioClip movieSE3;
@@ -159,7 +159,7 @@ public class BGMManager : MonoBehaviour
     {
         if (bgmSource == null)
         {
-            Debug.LogError("BGM AudioSource ‚ª‚ ‚è‚Ü‚¹‚ñ");
+            Debug.LogError("BGM AudioSourceNoFind");
             return;
         }
 

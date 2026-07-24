@@ -11,21 +11,21 @@ public class MaterialValue
 public class PlayerMovement : MonoBehaviour
 {
 
-    [Header("純度減少")]
+    [Header("Jundogensyou")]
     public float jundoDecreaseTime = 5f; //何秒ごとに減るか
     public int jundoDecreaseValue = 1;   //減る量
 
     private float jundoTimer = 0f;
 
 
-    [Header("ゲージ色")]
+    [Header("GageColor")]
     public Color highColor = Color.green; //60以上
     public Color lowColor = Color.red;    //30以下
     public Color middleColor = Color.yellow; //それ以外
 
     private float cameraY;
 
-    [Header("プレイヤー画面下制限")]
+    [Header("PlayerSitaseigen")]
     public float bottomMargin = 1f;
 
     private float originalThrustPower;
@@ -43,12 +43,12 @@ public class PlayerMovement : MonoBehaviour
     private GameObject haikeiUI;
 
 
-    [Header("ステージごとの必要素材画像（赤ちゃん1）")]
+    [Header("StagegotonohituyosozaiImage(Baby1)")]
     public Sprite[] needSprite1_baby1;
     public Sprite[] needSprite2_baby1;
     public Sprite[] needSprite3_baby1;
 
-    [Header("ステージごとの必要素材画像（赤ちゃん2）")]
+    [Header("StagegotonohituyosozaiImage(Baby2)")]
     public Sprite[] needSprite1_baby2;
     public Sprite[] needSprite2_baby2;
     public Sprite[] needSprite3_baby2;
@@ -59,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
     private Image needImg3;
 
 
-    [Header("ステージごとの赤ちゃん画像")]
+    [Header("StagegotonoBbyhyouzi")]
     public Sprite[] baby1Sprites;   // ステージごとの赤ちゃん1
     public Sprite[] baby2Sprites;   // ステージごとの赤ちゃん2
 
@@ -78,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
     private bool timeOver = false;*/
     
 
-    [Header("方向表示")]
+    [Header("houkouhyouzi")]
     public Transform arrowRoot;
 
     private SpriteRenderer spriteRenderer;
@@ -92,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
     private float inputCooldown = 0.2f;
     private float inputTimer = 0f;
 
-    [Header("素材ゲージ増減")]
+    [Header("SozaiGagezougen")]
     public MaterialValue Sipasent = new();
     public MaterialValue Cpasent = new();
     public MaterialValue Hepasent = new();
@@ -128,7 +128,7 @@ public class PlayerMovement : MonoBehaviour
     //-------------------------
     // 赤ちゃんオブジェクト
     //-------------------------
-    [Header("赤ちゃん")]
+    [Header("Baby")]
     public GameObject child;
     public GameObject child2;
 
@@ -140,7 +140,7 @@ public class PlayerMovement : MonoBehaviour
     //-------------------------
     public StageManager1 stageManager;
 
-    [Header("カメラ")]
+    [Header("Camera")]
     public Camera mainCamera;
 
     public float minY = 0f;
@@ -151,7 +151,7 @@ public class PlayerMovement : MonoBehaviour
     private JoyconManager jm;
     private Rigidbody2D rb;
 
-    [Header("噴射力")]
+    [Header("PushPawer")]
     public float thrustPower = 20f;
 
     //----------------------------------------------------
@@ -257,12 +257,12 @@ public class PlayerMovement : MonoBehaviour
 
         if (spriteRenderer == null)
         {
-            Debug.LogError("SpriteRendererがありません！");
+            Debug.LogError("SpriteRendererNofind");
         }
 
         if (rb == null)
         {
-            Debug.LogError("PlayerにRigidbody2Dが付いていません！");
+            Debug.LogError("PlayerにRigidbody2DNoAttach");
             enabled = false;
             return;
         }

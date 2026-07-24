@@ -3,30 +3,30 @@ using System.Collections;
 
 public class MaterialSpawner : MonoBehaviour
 {
-    [Header("素材のPrefab")]
+    [Header("sozaiToPrefab")]
     public GameObject[] materials;
 
-    [Header("生成ポイントの親（Empty）")]
+    [Header("seiseiPointtoParent(Empty)")]
     public Transform spawnParent;   // ← これが親 Empty
 
-    [Header("生成ポイント（7本のEmpty）")]
+    [Header("seiseipoint(7s)")]
     public Transform[] lanes;       // ← spawnParent の子
 
-    [Header("プレイヤー")]
+    [Header("Player")]
     public Transform player;
 
-    [Header("生成ポイントのYオフセット")]
+    [Header("seiseiPointnoYoffset")]
     public float spawnYOffset = -20f;
 
-    [Header("生成間隔")]
+    [Header("seiseikankaku")]
     public float minInterval = 0.5f;
     public float maxInterval = 2.0f;
 
-    [Header("落下速度")]
+    [Header("rakkasokudo")]
     public float minSpeed = 2.0f;
     public float maxSpeed = 6.0f;
 
-    [Header("生成した素材の親（Stage）")]
+    [Header("seiseisitaobujekutonoparrent(Stage)")]
     public Transform stageRoot;
 
     void Update()

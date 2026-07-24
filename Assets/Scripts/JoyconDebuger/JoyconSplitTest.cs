@@ -10,7 +10,7 @@ public class JoyconSplitTest : MonoBehaviour
 
         if (jm == null)
         {
-            Debug.LogError("JoyconManagerが見つからない");
+            Debug.LogError("JoyconManagerNoFind");
         }
     }
 
@@ -31,7 +31,7 @@ public class JoyconSplitTest : MonoBehaviour
             {
                 if (jc.GetButtonDown(b))
                 {
-                    Debug.Log($"[{side}] 押された: {b}");
+                    Debug.Log($"[{side}] osareta: {b}");
                 }
             }
 

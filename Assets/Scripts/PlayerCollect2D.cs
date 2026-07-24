@@ -14,7 +14,7 @@ public class PlayerSpriteData
 
 public class PlayerCollect2D : MonoBehaviour
 {
-    [Header("プレイヤー見た目変更")]
+    [Header("PlayermitameChange")]
     public SpriteRenderer playerRenderer;
 
     public PlayerSpriteData[] playerSpriteDatas;

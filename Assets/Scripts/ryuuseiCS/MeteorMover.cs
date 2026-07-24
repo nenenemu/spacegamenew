@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class MeteorMover : MonoBehaviour
 {
-    [Header("移動設定")]
+    [Header("idouSetting")]
     public float speed = 3f;          // 進む速さ
     public Vector2 direction = Vector2.right; // 進む方向（生成側で設定）
 
-    [Header("曲線設定")]
+    [Header("CourveSetting")]
     public float curveAmplitude = 1f; // 揺れ幅
     public float curveFrequency = 1f; // 揺れ速度
 

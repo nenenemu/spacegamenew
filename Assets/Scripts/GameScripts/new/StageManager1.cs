@@ -38,7 +38,7 @@ public class StageMaterialRule
 
 public class StageManager1 : MonoBehaviour
 {
-    [Header("カメラ")]
+    [Header("Camera")]
     public Camera mainCamera;
 
     public ResultImageSet[] resultImageSets;   // ★ステージごとに2枚ずつ入れる
@@ -266,7 +266,7 @@ public class StageManager1 : MonoBehaviour
         {
             StartCoroutine(BeginStage(stageNumber - 1));
         }
-        Debug.Log("★ StageTransitionEffect終了");
+        Debug.Log("StageTransitionEffectEnd");
 
     }
 
@@ -344,9 +344,9 @@ public class StageManager1 : MonoBehaviour
             isResultRunning = false;
         });
 
-        Debug.Log("会話開始前");
+        Debug.Log("kaiwakaisimae");
         kaiwa.StartKaiwa("Stage" + nextStage + "_Clear");
-        Debug.Log("★ ResultSequence終了");
+        Debug.Log("ResultSequenceSyuuryou");
     }
 
     IEnumerator PlayMovie(VideoClip clip)
@@ -499,7 +499,7 @@ public class StageManager1 : MonoBehaviour
 
     public IEnumerator BeginStage(int nextStage)
     {
-        Debug.Log("★ BeginStage 呼ばれた nextStage=" + nextStage);
+        Debug.Log("BeginStage yobareta nextStage=" + nextStage);
 
         canSpawn = false;
         canPlayerMove = false;
@@ -684,7 +684,7 @@ public class StageManager1 : MonoBehaviour
 
                 if (next)
                 {
-                    Debug.Log("ボタン押された：" + s.name);
+                    Debug.Log("PushtoButtom:" + s.name);
 
                     // ボタンを離すまで待つ
                     yield return new WaitUntil(() =>

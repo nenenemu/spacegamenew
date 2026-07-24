@@ -12,14 +12,14 @@ public class PlayerMovement2D : MonoBehaviour
     public StageManager1 stageManager;
     public float survivalTime; // 経過時間
 
-    [Header("ゲームオーバー画像")]
+    [Header("GameOverImage")]
     public GameObject gameOverImage;
 
     [Header("HP")]
     public int maxHP = 100;
     private int hp;
 
-    [Header("HPゲージ")]
+    [Header("HPGage")]
     public Image hpImage;
 
     public float speed = 7f;
@@ -28,7 +28,7 @@ public class PlayerMovement2D : MonoBehaviour
     private Vector2 input;
 
 
-    [Header("JoyCon設定")]
+    [Header("JoyCon設Setting")]
     public bool useJoyCon = true;
 
     private Joycon leftJoycon;
@@ -72,7 +72,7 @@ public class PlayerMovement2D : MonoBehaviour
             }
             catch
             {
-                Debug.Log("JoyCon未接続");
+                Debug.Log("JoyConNoFind");
             }
         }
     }

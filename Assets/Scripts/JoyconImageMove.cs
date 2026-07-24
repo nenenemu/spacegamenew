@@ -14,12 +14,12 @@ public class LeftJoyconController : MonoBehaviour
 
         if (jm == null)
         {
-            Debug.LogError("JoyconManagerが見つからない");
+            Debug.LogError("JoyconManagerNoFind");
         }
 
         if (targetImage == null)
         {
-            Debug.LogError("Imageが設定されてない");
+            Debug.LogError("ImageisNoSetting");
         }
     }
 
@@ -42,7 +42,7 @@ public class LeftJoyconController : MonoBehaviour
             {
                 if (jc.GetButtonDown(b))
                 {
-                    Debug.Log($"[LEFT] 押された: {b}");
+                    Debug.Log($"[LEFT] osareta: {b}");
                 }
             }
 

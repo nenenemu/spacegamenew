@@ -5,10 +5,10 @@ using System.Collections;
 [Serializable]
 public class KaiwaPage
 {
-    [Header("ページの画像（1枚絵）")]
+    [Header("PageyouImage(itimaie)")]
     public UnityEngine.UI.Image pageImage;
 
-    [Header("このページの隠すマスク")]
+    [Header("ThisPagemaskImage")]
     public UnityEngine.UI.Image[] lineMasks;
 
     [HideInInspector]
@@ -18,10 +18,10 @@ public class KaiwaPage
 [Serializable]
 public class KaiwaData
 {
-    [Header("会話名")]
+    [Header("kaiwaName")]
     public string kaiwaName;
 
-    [Header("ページ一覧")]
+    [Header("Pageitiran")]
     public KaiwaPage[] pages;
 }
 
@@ -191,7 +191,7 @@ public class kamikaiwaScript : MonoBehaviour
 
         if (current == null)
         {
-            Debug.LogError("会話データがない: " + name);
+            Debug.LogError("NoKaiwaDate: " + name);
             return;
         }
 

@@ -24,7 +24,7 @@ public class EndingManager : MonoBehaviour
         [HideInInspector] public Vector2[] defaultSizes;
     }
 
-    [Header("暗転")]
+    [Header("anten")]
     public Image fadeImage;
     public float fadeTime = 1f;
 
@@ -34,22 +34,22 @@ public class EndingManager : MonoBehaviour
     [Header("Image2")]
     public Image image2;
 
-    [Header("Image1表示時間")]
+    [Header("Image1hyouzizikan")]
     public float image1Time = 2.5f;
 
-    [Header("Image2表示時間")]
+    [Header("Image2hyouzizikan")]
     public float image2Time = 3f;
 
-    [Header("ラスト画像1")]
+    [Header("lastImage1")]
     public Image lastImage1;
 
-    [Header("ラスト画像2")]
+    [Header("lastImage2")]
     public Image lastImage2;
 
-    [Header("ラスト画像表示時間")]
+    [Header("lastImagehyouziTime")]
     public float lastImageTime = 3f;
 
-    [Header("会話")]
+    [Header("kaiwa")]
     public KaiwaData[] kaiwas;
 
     [Header("NEXT")]
