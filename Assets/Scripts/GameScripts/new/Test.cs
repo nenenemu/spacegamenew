@@ -5,6 +5,8 @@ using UnityEngine.Video;
 
 public class Test : MonoBehaviour
 {
+    public RawImage taiki;
+
     private bool movieStarting = false;
 
     private bool movieSEPlayed = false;
@@ -63,7 +65,7 @@ public class Test : MonoBehaviour
 
     public bool inbuttom = false;
 
-    public UnityEngine.UI.Image taiki;
+    //public UnityEngine.UI.Image taiki;
 
     public RawImage movieImage;
     public VideoPlayer videoPlayer;
@@ -173,6 +175,7 @@ public class Test : MonoBehaviour
         switch (state)
         {
             case State.taiki:
+
                 taiki.gameObject.SetActive(true);
                 titleImage.gameObject.SetActive(false);
                 movieImage.gameObject.SetActive(false);
@@ -182,15 +185,16 @@ public class Test : MonoBehaviour
                     img.gameObject.SetActive(false);
                 }
 
-
                 if (sceneFadeEnd && inbuttom && !movieStarting)
                 {
                     inbuttom = false;
                     movieStarting = true;
+
+                    // ë“ã@âÊñ ÇÕç≈èâÇÃàÍâÒÇæÇØ
+                    taiki.gameObject.SetActive(false);
+
                     StartCoroutine(FadeInToMovie());
                 }
-
-
 
                 break;
 

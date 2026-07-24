@@ -4262,7 +4262,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b2d8c74113bbe1d4b8bd1a4cbab467de, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a9f452dd698f0d84ab937cbf40161cc5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5202,6 +5202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb3d62caca19bba4b89cb122ae4abf32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Test
+  taiki: {fileID: 1063744165}
   openingMovie: {fileID: 32900000, guid: 3752728a829683040b303dcde06e8fff, type: 3}
   endingMovie: {fileID: 32900000, guid: 6cf7c12c201ef7d42b4bf98692858317, type: 3}
   sceneFadeImage: {fileID: 14470599}
@@ -5218,7 +5219,6 @@ MonoBehaviour:
   slideDistance: 1000
   kamikaiwaScript: {fileID: 2080858276}
   inbuttom: 0
-  taiki: {fileID: 1988554496}
   movieImage: {fileID: 1363793622}
   videoPlayer: {fileID: 1363793621}
   titleImage: {fileID: 741018857}
@@ -6772,6 +6772,113 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1030620092}
   m_CullTransparentMesh: 1
+--- !u!1 &1063744164
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1063744168}
+  - component: {fileID: 1063744167}
+  - component: {fileID: 1063744165}
+  - component: {fileID: 1063744166}
+  m_Layer: 5
+  m_Name: taikigamen2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1063744165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063744164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RawImage
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 8400000, guid: 54233699c3052de42af22a024457528b, type: 2}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!328 &1063744166
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063744164}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 32900000, guid: df829162baec7a942ab252b7b4fb12d2, type: 3}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 54233699c3052de42af22a024457528b, type: 2}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: <noninit>
+  m_RenderMode: 2
+  m_AspectRatio: 2
+  m_DataSource: 0
+  m_TimeUpdateMode: 2
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 2
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
+  m_Url: 
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
+  m_PlayOnAwake: 1
+  m_SkipOnDrop: 1
+  m_Looping: 1
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
+--- !u!222 &1063744167
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063744164}
+  m_CullTransparentMesh: 1
+--- !u!224 &1063744168
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063744164}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1422327332}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920, y: 1080}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1069976791
 GameObject:
   m_ObjectHideFlags: 0
@@ -9207,6 +9314,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1063744168}
   - {fileID: 1988554495}
   - {fileID: 741018855}
   - {fileID: 1363793620}
@@ -11920,6 +12028,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 939e020ee24bb004e9bc0439826594ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BGMManager
+  tapSE: {fileID: 0}
   bgmSource: {fileID: 1790513788}
   seSource: {fileID: 1790513787}
   taikiBGM: {fileID: 0}
@@ -13519,7 +13628,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1988554495
 RectTransform:
   m_ObjectHideFlags: 0
