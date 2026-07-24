@@ -171,7 +171,7 @@ public class StageManager1 : MonoBehaviour
             return materialRules[stageIdx].correct2nd[materialIndex];
     }
 
-    public void StageClear(int nextStage, int baby1, int baby2)
+    public void StageClear(int nextStage, int baby1, int baby2)//ここ
     {
         Debug.Log(
         "StageClear stageNumber=" + stageNumber +
@@ -183,6 +183,8 @@ public class StageManager1 : MonoBehaviour
         resultBaby2 = baby2;
 
         DestroyAllMaterials();
+
+
 
         if (stageNumber == 3 || stageNumber == 4)
         {
@@ -255,6 +257,7 @@ public class StageManager1 : MonoBehaviour
         // 素材削除
         DestroyStageMaterials();
 
+        DM();
         // 暗転
         yield return StartCoroutine(Fade(blackFade, 0, 1));
 
@@ -347,6 +350,8 @@ public class StageManager1 : MonoBehaviour
         Debug.Log("kaiwakaisimae");
         kaiwa.StartKaiwa("Stage" + nextStage + "_Clear");
         Debug.Log("ResultSequenceSyuuryou");
+
+        DM();
     }
 
     IEnumerator PlayMovie(VideoClip clip)
@@ -723,5 +728,21 @@ public class StageManager1 : MonoBehaviour
         tutorialImage.gameObject.SetActive(false);
 
         canSpawn = true;
+    }
+
+    void DM()
+    {
+        // Materialレイヤー番号に変更
+        int materialLayer = LayerMask.NameToLayer("Material");
+
+        GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.layer == materialLayer)
+            {
+                Destroy(obj);
+            }
+        }
     }
 }

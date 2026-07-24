@@ -9093,36 +9093,42 @@ MonoBehaviour:
   lastImage2: {fileID: 481477864}
   lastImageTime: 3
   kaiwas:
-  - kaiwaImage: {fileID: 2059302124}
+  - initialized: 0
+    kaiwaImage: {fileID: 2059302124}
     masks:
     - {fileID: 1236435719}
     - {fileID: 298020812}
     - {fileID: 126455391}
     defaultSizes: []
-  - kaiwaImage: {fileID: 196546845}
+  - initialized: 0
+    kaiwaImage: {fileID: 196546845}
     masks:
     - {fileID: 1519408949}
     - {fileID: 99775964}
     defaultSizes: []
-  - kaiwaImage: {fileID: 508713999}
+  - initialized: 0
+    kaiwaImage: {fileID: 508713999}
     masks:
     - {fileID: 879534932}
     - {fileID: 1640488797}
     - {fileID: 3367185}
     defaultSizes: []
-  - kaiwaImage: {fileID: 1111295296}
+  - initialized: 0
+    kaiwaImage: {fileID: 1111295296}
     masks:
     - {fileID: 248211136}
     - {fileID: 378463100}
     - {fileID: 373985479}
     defaultSizes: []
-  - kaiwaImage: {fileID: 515526660}
+  - initialized: 0
+    kaiwaImage: {fileID: 515526660}
     masks:
     - {fileID: 1162584786}
     - {fileID: 1965993300}
     - {fileID: 669381548}
     defaultSizes: []
-  - kaiwaImage: {fileID: 82569274}
+  - initialized: 0
+    kaiwaImage: {fileID: 82569274}
     masks:
     - {fileID: 556940546}
     - {fileID: 1774676954}

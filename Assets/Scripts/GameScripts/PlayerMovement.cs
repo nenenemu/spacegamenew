@@ -623,6 +623,8 @@ public class PlayerMovement : MonoBehaviour
         {
             gameEnd = true;
 
+            DestroyAllMaterials();   // Å©í«â¡
+
             stageManager.StageClear(
                 1,
                 baby1jundo,
@@ -919,6 +921,22 @@ public class PlayerMovement : MonoBehaviour
             return lowColor;
 
         return middleColor;
+    }
+
+    void DestroyAllMaterials()
+    {
+        // MaterialÉåÉCÉÑÅ[î‘çÜÇ…ïœçX
+        int materialLayer = LayerMask.NameToLayer("Material");
+
+        GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.layer == materialLayer)
+            {
+                Destroy(obj);
+            }
+        }
     }
 
 }
