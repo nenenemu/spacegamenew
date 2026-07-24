@@ -13,6 +13,8 @@ public class EndingManager : MonoBehaviour
     [Serializable]
     public class KaiwaData
     {
+        [HideInInspector] public bool initialized;
+
         [Header("会話画像")]
         public Image kaiwaImage;
 
@@ -87,6 +89,19 @@ public class EndingManager : MonoBehaviour
         fadeImage.color = c;
 
         image2StartPos = image2.rectTransform.localPosition;
+
+        // マスクの元サイズを最初に保存
+        foreach (var d in kaiwas)
+        {
+            d.defaultSizes = new Vector2[d.masks.Length];
+
+            for (int i = 0; i < d.masks.Length; i++)
+            {
+                d.defaultSizes[i] = d.masks[i].rectTransform.sizeDelta;
+            }
+
+            d.initialized = true;
+        }
     }
 
     public void StartEnding()
@@ -192,10 +207,7 @@ public class EndingManager : MonoBehaviour
         {
             KaiwaData data = kaiwas[currentKaiwa];
 
-            // ★ 削る前のサイズを毎回保存
-            data.defaultSizes = new Vector2[data.masks.Length];
-            for (int i = 0; i < data.masks.Length; i++)
-                data.defaultSizes[i] = data.masks[i].rectTransform.sizeDelta;
+            
 
             // ★ サイズを戻す
             for (int i = 0; i < data.masks.Length; i++)
